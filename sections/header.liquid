@@ -9,11 +9,11 @@
     </a>
 
     <nav class="site-nav">
-      <a href="/" class="{% if request.page_type == 'index' %}active{% endif %}">Home</a>
+      <a href="/" class="{% if request.page_type == 'index' and request.path == '/' %}active{% endif %}">Home</a>
       <a href="/collections/all" class="{% if request.page_type == 'collection' %}active{% endif %}">Shop</a>
-      <a href="/pages/box-builder" class="{% if request.path contains 'box-builder' %}active{% endif %}">Build a Box</a>
-      <a href="/pages/about" class="{% if request.path contains 'about' %}active{% endif %}">About Us</a>
+      <a href="/#box-builder">Build a Box</a>
       <a href="/#how-it-works">How It Works</a>
+      <a href="/pages/about" class="{% if request.path contains 'about' %}active{% endif %}">About Us</a>
       <a href="/pages/contact" class="{% if request.path contains 'contact' %}active{% endif %}">Contact</a>
     </nav>
 

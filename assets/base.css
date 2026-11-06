@@ -915,3 +915,253 @@ body {
   padding: 1rem;
   margin: 1.25rem 0;
 }
+
+/* ==========================================================================
+   Custom Box Builder Section Styles (Modern Pill & Luxury UI)
+   ========================================================================== */
+.box-builder-section {
+  padding: 4rem 0;
+  background: var(--color-bg-subtle);
+}
+.wizard-container {
+  background: #ffffff;
+  border-radius: 32px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  padding: 3rem 2.5rem;
+}
+@media (max-width: 768px) {
+  .wizard-container {
+    padding: 2rem 1.25rem;
+    border-radius: 20px;
+  }
+}
+.wizard-header {
+  text-align: center;
+  margin-bottom: 2.75rem;
+}
+.wizard-header h2 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--color-text-dark);
+  margin: 0 0 0.5rem 0;
+}
+.builder-summary-text {
+  color: var(--color-text-muted);
+  font-size: 1.05rem;
+  margin: 0 0 1.5rem 0;
+}
+
+/* Step Indicators (Modern Pill Tabs) */
+.wizard-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.wizard-step-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.6rem;
+  border-radius: var(--radius-pill);
+  background: #f1f3f5;
+  color: #6c757d;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.wizard-step-indicator.active {
+  background: var(--color-coral-gradient);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(230, 57, 70, 0.3);
+}
+.wizard-step-indicator.completed {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-color: #c8e6c9;
+}
+
+/* Step Panes: Hide inactive, display active */
+.builder-step-pane {
+  display: none !important;
+}
+.builder-step-pane.active {
+  display: block !important;
+  animation: fadeInStep 0.25s ease-out;
+}
+@keyframes fadeInStep {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Box & Goodies Product Cards */
+.box-builder-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.75rem;
+  margin-bottom: 2.5rem;
+}
+.packaging-card,
+.item-card {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 2px solid var(--color-border);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+}
+.packaging-card:hover,
+.item-card:hover {
+  border-color: #ffd4d4;
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-sm);
+}
+.packaging-card.selected,
+.item-card.selected {
+  border-color: var(--color-coral-primary) !important;
+  box-shadow: 0 0 0 3px rgba(255, 80, 83, 0.2), 0 8px 24px rgba(230, 57, 70, 0.12) !important;
+}
+
+/* Card Images */
+.packaging-card img,
+.item-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 14px;
+  margin-bottom: 1rem;
+  background: #fdfaf7;
+  display: block;
+}
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 0.4rem 0;
+  color: var(--color-text-dark);
+}
+.card-price {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--color-coral-dark);
+  margin-bottom: 1rem;
+}
+
+/* Selection Buttons */
+.select-packaging-btn {
+  width: 100%;
+  background: #f8f9fa;
+  border: 1.5px solid var(--color-border);
+  color: var(--color-text-dark);
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-top: auto;
+}
+.packaging-card.selected .select-packaging-btn {
+  background: var(--color-coral-gradient);
+  border-color: transparent;
+  color: #ffffff;
+}
+
+/* Quantity Control Pills */
+.qty-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8f9fa;
+  border-radius: var(--radius-pill);
+  padding: 0.35rem 0.6rem;
+  margin-top: auto;
+  border: 1px solid var(--color-border);
+}
+.qty-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #ffffff;
+  color: var(--color-text-dark);
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  transition: background 0.15s, color 0.15s;
+}
+.qty-btn:hover {
+  background: var(--color-coral-primary);
+  color: #ffffff;
+}
+.qty-val {
+  min-width: 32px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--color-text-dark);
+}
+
+/* Personalization Step 3 */
+.personalization-form {
+  max-width: 680px;
+  margin: 0 auto 2.5rem;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 2.5rem;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+.personalization-form textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: 16px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  min-height: 120px;
+  resize: vertical;
+}
+.personalization-form input[type="file"] {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: #f8f9fa;
+  border: 2px dashed var(--color-border);
+  border-radius: 16px;
+  cursor: pointer;
+}
+#bundle-review-summary {
+  background: #faf8f5 !important;
+  border: 1px solid #e9e2d8 !important;
+  border-radius: 18px !important;
+  padding: 1.5rem !important;
+}
+
+/* Wizard Controls Footer */
+.wizard-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border-top: 1px solid var(--color-border);
+  padding: 1.25rem 0;
+  position: sticky;
+  bottom: 0;
+  z-index: 90;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+}
+.builder-footer-summary {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-text-dark);
+}

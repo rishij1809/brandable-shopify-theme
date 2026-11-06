@@ -8,116 +8,116 @@
 
 <section id="box-builder" class="box-builder-section" data-section-id="{{ section.id }}">
   <div class="container">
-    <div class="wizard-header">
-      <h2>{{ section.settings.heading | default: 'Build Your Custom Gift Box' }}</h2>
-      <p class="builder-summary-text" id="builder-step-instructions">Step 1: Choose your box or crate style.</p>
+    <div class="wizard-container">
+      <div class="wizard-header">
+        <h2>{{ section.settings.heading | default: 'Build Your Custom Gift Box' }}</h2>
+        <p class="builder-summary-text" id="builder-step-instructions">Step 1: Choose your box or crate style.</p>
 
-      <div class="wizard-steps">
-        <div class="wizard-step-indicator active" data-step-indicator="1">1. Packaging</div>
-        <div class="wizard-step-indicator" data-step-indicator="2">2. Select Goodies</div>
-        <div class="wizard-step-indicator" data-step-indicator="3">3. Personalize</div>
+        <div class="wizard-steps">
+          <div class="wizard-step-indicator active" data-step-indicator="1">📦 1. Select Box</div>
+          <div class="wizard-step-indicator" data-step-indicator="2">🎁 2. Curate Goodies</div>
+          <div class="wizard-step-indicator" data-step-indicator="3">✨ 3. Personalize & Brand</div>
+        </div>
       </div>
-    </div>
 
-    <!-- STEP 1: PACKAGING -->
-    <div class="builder-step-pane active" data-step-pane="1">
-      <div class="product-grid" id="packaging-grid">
-        {% assign packaging_count = 0 %}
-        {% for product in collections.all.products %}
-          {% if product.tags contains 'custom:packaging' %}
-            {% assign packaging_count = packaging_count | plus: 1 %}
-            {% assign variant = product.selected_or_first_available_variant | default: product.variants.first %}
-            <div class="product-card packaging-card" 
-                 data-id="{{ variant.id }}" 
-                 data-title="{{ product.title | escape }}" 
-                 data-price="{{ product.price | money }}">
-              <img src="{{ product.featured_image | image_url: width: 400 }}" 
-                   alt="{{ product.title | escape }}" 
-                   loading="lazy" 
-                   width="400" 
-                   height="400">
-              <h3 class="card-title">{{ product.title }}</h3>
-              <div class="card-price">{{ product.price | money }}</div>
-              <button type="button" class="btn btn-secondary select-packaging-btn">Select This Box</button>
-            </div>
-          {% endif %}
-        {% endfor %}
-
-        {% if packaging_count == 0 %}
-          <p class="text-muted" style="grid-column: 1/-1; text-align: center;">
-            No packaging options found. Please tag your box products with <code>custom:packaging</code>.
-          </p>
-        {% endif %}
-      </div>
-    </div>
-
-    <!-- STEP 2: BOX ITEMS -->
-    <div class="builder-step-pane" data-step-pane="2">
-      <div class="product-grid" id="items-grid">
-        {% assign items_count = 0 %}
-        {% for product in collections.all.products %}
-          {% if product.tags contains 'custom:box_item' %}
-            {% assign items_count = items_count | plus: 1 %}
-            {% assign variant = product.selected_or_first_available_variant | default: product.variants.first %}
-            <div class="product-card item-card" 
-                 data-id="{{ variant.id }}" 
-                 data-title="{{ product.title | escape }}" 
-                 data-price="{{ product.price | money }}">
-              <img src="{{ product.featured_image | image_url: width: 400 }}" 
-                   alt="{{ product.title | escape }}" 
-                   loading="lazy" 
-                   width="400" 
-                   height="400">
-              <h3 class="card-title">{{ product.title }}</h3>
-              <div class="card-price">{{ product.price | money }}</div>
-              <div class="qty-control">
-                <button type="button" class="qty-btn btn-qty-minus" aria-label="Decrease">&minus;</button>
-                <span class="qty-val" data-qty-for="{{ variant.id }}">0</span>
-                <button type="button" class="qty-btn btn-qty-plus" aria-label="Increase">&#43;</button>
+      <!-- STEP 1: PACKAGING -->
+      <div class="builder-step-pane active" data-step-pane="1">
+        <div class="box-builder-grid" id="packaging-grid">
+          {% assign packaging_count = 0 %}
+          {% for product in collections.all.products %}
+            {% if product.tags contains 'custom:packaging' %}
+              {% assign packaging_count = packaging_count | plus: 1 %}
+              {% assign variant = product.selected_or_first_available_variant | default: product.variants.first %}
+              <div class="product-card packaging-card" 
+                   data-id="{{ variant.id }}" 
+                   data-title="{{ product.title | escape }}" 
+                   data-price="{{ product.price | money }}">
+                <img src="{{ product.featured_image | image_url: width: 400 }}" 
+                     alt="{{ product.title | escape }}" 
+                     loading="lazy" 
+                     width="400" 
+                     height="400">
+                <h3 class="card-title">{{ product.title }}</h3>
+                <div class="card-price">{{ product.price | money }}</div>
+                <button type="button" class="select-packaging-btn">Select This Box</button>
               </div>
-            </div>
+            {% endif %}
+          {% endfor %}
+
+          {% if packaging_count == 0 %}
+            <p class="text-muted" style="grid-column: 1/-1; text-align: center; padding: 2rem 0;">
+              No packaging options found. Please tag your box products with <code>custom:packaging</code>.
+            </p>
           {% endif %}
-        {% endfor %}
-
-        {% if items_count == 0 %}
-          <p class="text-muted" style="grid-column: 1/-1; text-align: center;">
-            No items found. Please tag your gift products with <code>custom:box_item</code>.
-          </p>
-        {% endif %}
-      </div>
-    </div>
-
-    <!-- STEP 3: PERSONALIZATION -->
-    <div class="builder-step-pane" data-step-pane="3">
-      <div class="personalization-form">
-        <div class="form-group">
-          <label for="box-gift-note">Custom Gift Note / Corporate Message</label>
-          <textarea id="box-gift-note" placeholder="Write the message you'd like printed or hand-written on the greeting card..."></textarea>
-          <small>Optional: Leave blank if you don't require custom messaging.</small>
-        </div>
-
-        <div class="form-group">
-          <label for="box-logo-file">Upload Corporate Logo (Optional)</label>
-          <input type="file" id="box-logo-file" accept="image/*,.pdf,.eps,.ai,.svg">
-          <small>For custom laser-engraved or branded boxes, upload high-res PNG, SVG, or PDF.</small>
-        </div>
-
-        <div id="bundle-review-summary" style="background: #f8fafc; padding: 1rem; border-radius: 6px; margin-top: 1.5rem; font-size: 0.9rem;">
-          <strong>Box Configuration Summary:</strong>
-          <div id="summary-packaging-name" style="margin-top: 0.5rem; color: var(--color-accent);">Packaging: None</div>
-          <div id="summary-items-list" style="margin-top: 0.25rem;">Items: 0 selected</div>
         </div>
       </div>
-    </div>
 
-    <!-- WIZARD CONTROLS FOOTER -->
-    <div class="wizard-footer">
-      <div class="container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+      <!-- STEP 2: BOX ITEMS -->
+      <div class="builder-step-pane" data-step-pane="2">
+        <div class="box-builder-grid" id="items-grid">
+          {% assign items_count = 0 %}
+          {% for product in collections.all.products %}
+            {% if product.tags contains 'custom:box_item' %}
+              {% assign items_count = items_count | plus: 1 %}
+              {% assign variant = product.selected_or_first_available_variant | default: product.variants.first %}
+              <div class="product-card item-card" 
+                   data-id="{{ variant.id }}" 
+                   data-title="{{ product.title | escape }}" 
+                   data-price="{{ product.price | money }}">
+                <img src="{{ product.featured_image | image_url: width: 400 }}" 
+                     alt="{{ product.title | escape }}" 
+                     loading="lazy" 
+                     width="400" 
+                     height="400">
+                <h3 class="card-title">{{ product.title }}</h3>
+                <div class="card-price">{{ product.price | money }}</div>
+                <div class="qty-control">
+                  <button type="button" class="qty-btn btn-qty-minus" aria-label="Decrease">&minus;</button>
+                  <span class="qty-val" data-qty-for="{{ variant.id }}">0</span>
+                  <button type="button" class="qty-btn btn-qty-plus" aria-label="Increase">&#43;</button>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+
+          {% if items_count == 0 %}
+            <p class="text-muted" style="grid-column: 1/-1; text-align: center; padding: 2rem 0;">
+              No items found. Please tag your gift products with <code>custom:box_item</code>.
+            </p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- STEP 3: PERSONALIZATION -->
+      <div class="builder-step-pane" data-step-pane="3">
+        <div class="personalization-form">
+          <div class="form-group">
+            <label for="box-gift-note">Custom Gift Note / Corporate Greeting</label>
+            <textarea id="box-gift-note" placeholder="Write the message you'd like printed or foil-stamped on the greeting card..."></textarea>
+            <small style="color: var(--color-text-muted); display: block; margin-top: 0.25rem;">Optional: Leave blank if no custom message is needed.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="box-logo-file">Upload Corporate Logo for Custom Engraving (Optional)</label>
+            <input type="file" id="box-logo-file" accept="image/*,.pdf,.eps,.ai,.svg">
+            <small style="color: var(--color-text-muted); display: block; margin-top: 0.25rem;">For custom laser-engraved wooden lids or branded box sleeves (PNG, SVG, PDF).</small>
+          </div>
+
+          <div id="bundle-review-summary">
+            <strong style="color: var(--color-text-dark); font-size: 1rem;">Live Box Configuration:</strong>
+            <div id="summary-packaging-name" style="margin-top: 0.5rem; font-weight: 700; color: var(--color-coral-dark);">Packaging: None</div>
+            <div id="summary-items-list" style="margin-top: 0.25rem; color: #495057;">Items: 0 selected</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WIZARD CONTROLS FOOTER -->
+      <div class="wizard-footer">
         <button type="button" class="btn btn-secondary" id="btn-wizard-prev" style="visibility: hidden;">&larr; Back</button>
-        <div class="builder-summary-text" id="builder-footer-summary">1 Box & 0 Items selected</div>
+        <div class="builder-footer-summary" id="builder-footer-summary">No box + 0 items selected</div>
         <div>
-          <button type="button" class="btn btn-green" id="btn-wizard-next" disabled>Next Step &rarr;</button>
-          <button type="button" class="btn btn-crimson" id="btn-wizard-submit" style="display: none;">Add Box to Basket &rarr;</button>
+          <button type="button" class="btn btn-primary" id="btn-wizard-next" disabled>Next Step &rarr;</button>
+          <button type="button" class="btn btn-primary" id="btn-wizard-submit" style="display: none;">Add Box to Basket &rarr;</button>
         </div>
       </div>
     </div>

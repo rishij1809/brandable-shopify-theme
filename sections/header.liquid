@@ -98,28 +98,28 @@
   <!-- Secondary Category Ribbon (IGP Horizontal Bar) -->
   <nav class="igp-category-bar">
     <div class="container igp-category-container">
-      <a href="/collections/all" class="igp-cat-link {% if request.page_type == 'collection' %}active{% endif %}">
+      <a href="/collections/all" class="igp-cat-link {% if request.page_type == 'collection' and current_tags == blank %}active{% endif %}" data-category="all">
         All Hampers
       </a>
       <a href="/#box-builder" class="igp-cat-link">
         Build a Box <span class="igp-ribbon-tag">CUSTOM</span>
       </a>
-      <a href="/collections/all" class="igp-cat-link">
+      <a href="/collections/all/executive-combos" class="igp-cat-link {% if current_tags contains 'executive-combos' or current_tags contains 'executive' %}active{% endif %}" data-category="executive-combos">
         Executive Combos
       </a>
-      <a href="/collections/all" class="igp-cat-link">
+      <a href="/collections/all/employee-onboarding" class="igp-cat-link {% if current_tags contains 'employee-onboarding' or current_tags contains 'onboarding' %}active{% endif %}" data-category="employee-onboarding">
         Employee Onboarding
       </a>
-      <a href="/collections/all" class="igp-cat-link">
+      <a href="/collections/all/drinkware" class="igp-cat-link {% if current_tags contains 'drinkware' or current_tags contains 'bottles' %}active{% endif %}" data-category="drinkware">
         Drinkware & Bottles
       </a>
-      <a href="/collections/all" class="igp-cat-link">
+      <a href="/collections/all/diaries" class="igp-cat-link {% if current_tags contains 'diaries' or current_tags contains 'stationery' %}active{% endif %}" data-category="diaries">
         Diaries & Stationary
       </a>
-      <a href="/collections/all" class="igp-cat-link">
+      <a href="/collections/all/apparel" class="igp-cat-link {% if current_tags contains 'apparel' or current_tags contains 'tshirts' %}active{% endif %}" data-category="apparel">
         Apparel & Bags
       </a>
-      <a href="/collections/all" class="igp-cat-link">
+      <a href="/collections/all/festive" class="igp-cat-link {% if current_tags contains 'festive' or current_tags contains 'diwali' %}active{% endif %}" data-category="festive">
         Diwali & Festive
       </a>
       <a href="/#how-it-works" class="igp-cat-link">

@@ -1,7 +1,42 @@
 {% comment %}
   Brandable Main Collection Template
   Design & Architecture modeled after IGP (https://www.igp.com/birthday-gifts)
+  With Dynamic Category & Tag Filtering for all Corporate Gifting Sections
 {% endcomment %}
+
+{% assign current_tag = current_tags.first | default: '' | downcase %}
+
+{% assign active_title = 'Corporate Hampers & Celebration Gifts' %}
+{% assign active_desc = 'Explore ready-to-ship luxury hampers, branded crates, and custom gift bundles. Zero payment upfront — custom laser engraving included on 25+ units.' %}
+
+{% if current_tag contains 'drinkware' or current_tag contains 'bottle' %}
+  {% assign active_title = 'Drinkware & Insulated Bottles' %}
+  {% assign active_desc = 'Smart temperature-sensing bottles, vacuum-insulated tumblers, and stainless steel corporate drinkware with custom laser engraving.' %}
+{% elsif current_tag contains 'executive' %}
+  {% assign active_title = 'Executive Luxury Combos' %}
+  {% assign active_desc = 'Curated luxury hampers, gourmet treats, and handcrafted keepsakes for executive leadership and VIP clients.' %}
+{% elsif current_tag contains 'onboarding' or current_tag contains 'employee' %}
+  {% assign active_title = 'Employee Welcome & Onboarding Kits' %}
+  {% assign active_desc = 'Premium new-hire welcome boxes, branded notebooks, insulated tumblers, and custom swag kits.' %}
+{% elsif current_tag contains 'diar' or current_tag contains 'station' %}
+  {% assign active_title = 'Diaries & Executive Stationary' %}
+  {% assign active_desc = 'Personalized leather journals, metallic rollerball pens, desk planners, and executive stationery.' %}
+{% elsif current_tag contains 'apparel' or current_tag contains 'bag' or current_tag contains 'tshirt' %}
+  {% assign active_title = 'Corporate Apparel & Bags' %}
+  {% assign active_desc = 'Bespoke embroidered polo tees, unisex hoodies, and professional laptop backpacks.' %}
+{% elsif current_tag contains 'festive' or current_tag contains 'diwali' %}
+  {% assign active_title = 'Diwali & Festive Celebration Hampers' %}
+  {% assign active_desc = 'Festive dry fruit boxes, artisanal sweets, brass diyas, and celebration crates.' %}
+{% elsif current_tag contains 'tech' %}
+  {% assign active_title = 'Tech & Smart Gadgets' %}
+  {% assign active_desc = 'Wireless charging docks, Bluetooth speakers, powerbanks, and modern workplace gadgets.' %}
+{% elsif current_tag contains 'gourmet' or current_tag contains 'chocolate' %}
+  {% assign active_title = 'Artisan Treats & Gourmet Chocolates' %}
+  {% assign active_desc = 'Handcrafted Belgian pralines, specialty coffees, and organic tea gift sets.' %}
+{% elsif current_tag contains 'eco' %}
+  {% assign active_title = 'Eco-Friendly & Sustainable Gifts' %}
+  {% assign active_desc = 'Bamboo desk sets, indoor air-purifying plants, and eco-conscious gifting hampers.' %}
+{% endif %}
 
 <div class="igp-collection-page">
   <div class="container">
@@ -11,29 +46,51 @@
       <span class="breadcrumb-separator">&rsaquo;</span>
       <a href="/collections/all">Corporate Gifting</a>
       <span class="breadcrumb-separator">&rsaquo;</span>
-      <span class="breadcrumb-current">{{ collection.title | default: 'All Hampers & Gifts' }}</span>
+      <span class="breadcrumb-current" id="collection-breadcrumb-current">{{ active_title }}</span>
     </nav>
 
     <!-- Collection Header & Description -->
     <div class="igp-collection-header">
       <div class="collection-title-wrap">
-        <h1>{{ collection.title | default: 'Corporate Hampers & Celebration Gifts' }}</h1>
-        <span class="collection-count">({{ collection.products_count | default: 12 }} Gifts Available)</span>
+        <h1 id="collection-main-heading">{{ active_title }}</h1>
+        <span class="collection-count" id="collection-count-badge">({{ collection.products_count | default: 0 }} Gifts Available)</span>
       </div>
-      <p class="collection-desc">
-        {{ collection.description | default: 'Explore ready-to-ship luxury hampers, branded crates, and custom gift bundles. Zero payment upfront — custom laser engraving included on 25+ units.' }}
+      <p class="collection-desc" id="collection-desc-text">
+        {{ active_desc }}
       </p>
     </div>
 
-    <!-- IGP Style Filter & Sort Toolbar -->
+    <!-- IGP Style Category & Tag Navigation Chips -->
     <div class="igp-filter-toolbar">
-      <div class="igp-filter-chips">
-        <span class="filter-label">Quick Filters:</span>
-        <button type="button" class="filter-chip active" onclick="this.classList.toggle('active')">All Hampers</button>
-        <button type="button" class="filter-chip" onclick="this.classList.toggle('active')">⚡ Express Dispatch</button>
-        <button type="button" class="filter-chip" onclick="this.classList.toggle('active')">⭐ 4.5+ Rated</button>
-        <button type="button" class="filter-chip" onclick="this.classList.toggle('active')">🎨 Free Logo Engraving</button>
-        <a href="/#box-builder" class="filter-chip chip-highlight">📦 Custom Box Builder</a>
+      <div class="igp-filter-chips" id="category-filter-chips">
+        <span class="filter-label">Categories:</span>
+        <button type="button" class="filter-chip {% if current_tag == blank %}active{% endif %}" data-cat="all" onclick="applyCategoryFilter('all')">
+          All Hampers
+        </button>
+        <button type="button" class="filter-chip {% if current_tag contains 'executive' %}active{% endif %}" data-cat="executive-combos" onclick="applyCategoryFilter('executive-combos')">
+          Executive Combos
+        </button>
+        <button type="button" class="filter-chip {% if current_tag contains 'onboarding' %}active{% endif %}" data-cat="employee-onboarding" onclick="applyCategoryFilter('employee-onboarding')">
+          Employee Onboarding
+        </button>
+        <button type="button" class="filter-chip {% if current_tag contains 'drinkware' or current_tag contains 'bottle' %}active{% endif %}" data-cat="drinkware" onclick="applyCategoryFilter('drinkware')">
+          Drinkware & Bottles
+        </button>
+        <button type="button" class="filter-chip {% if current_tag contains 'diar' or current_tag contains 'station' %}active{% endif %}" data-cat="diaries" onclick="applyCategoryFilter('diaries')">
+          Diaries & Stationary
+        </button>
+        <button type="button" class="filter-chip {% if current_tag contains 'apparel' or current_tag contains 'bag' %}active{% endif %}" data-cat="apparel" onclick="applyCategoryFilter('apparel')">
+          Apparel & Bags
+        </button>
+        <button type="button" class="filter-chip {% if current_tag contains 'festive' or current_tag contains 'diwali' %}active{% endif %}" data-cat="festive" onclick="applyCategoryFilter('festive')">
+          Diwali & Festive
+        </button>
+        <button type="button" class="filter-chip {% if current_tag contains 'tech' %}active{% endif %}" data-cat="tech" onclick="applyCategoryFilter('tech')">
+          Tech & Gadgets
+        </button>
+        <a href="/#box-builder" class="filter-chip chip-highlight">
+          📦 Build a Box Studio
+        </a>
       </div>
 
       <div class="igp-sort-wrapper">
@@ -48,13 +105,17 @@
     </div>
 
     <!-- Product Grid -->
-    <div class="igp-products-grid">
+    <div class="igp-products-grid" id="main-products-grid">
       {% assign count = 0 %}
       {% for product in collection.products %}
         {% assign count = count | plus: 1 %}
         {% assign variant = product.selected_or_first_available_variant | default: product.variants.first %}
+        {% assign tags_clean = product.tags | join: ' ' | downcase %}
         
-        <div class="igp-product-card">
+        <div class="igp-product-card" 
+             data-product-card="true"
+             data-tags="{{ tags_clean }}"
+             data-title="{{ product.title | downcase }}">
           <!-- Card Media -->
           <div class="igp-card-media">
             {% if product.tags contains 'custom:packaging' %}
@@ -123,14 +184,196 @@
             </div>
           </div>
         </div>
-      {% else %}
-        <p class="text-muted" style="grid-column: 1/-1; text-align: center; padding: 3rem 0;">
-          No products found in this collection.
-        </p>
       {% endfor %}
+    </div>
+
+    <!-- Empty State for Unmatched Category -->
+    <div id="category-empty-state" style="display: none; text-align: center; padding: 4rem 1.5rem; background: #ffffff; border: 1px dashed var(--igp-border); border-radius: var(--radius-card); margin: 2rem 0;">
+      <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🏷️</div>
+      <h3 style="font-size: 1.3rem; margin: 0 0 0.5rem 0; color: var(--igp-text);" id="empty-state-title">No products found in this category</h3>
+      <p style="color: var(--igp-text-muted); max-width: 540px; margin: 0 auto 1.5rem; line-height: 1.6;" id="empty-state-desc">
+        To display products in this section, edit your product in <strong>Shopify Admin &rarr; Products</strong> and add the tag shown in your Product Tagging PDF guide.
+      </p>
+      <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+        <button type="button" class="btn-igp-primary" onclick="applyCategoryFilter('all')">
+          View All Products &rarr;
+        </button>
+        <a href="/#box-builder" class="btn-igp-outline">
+          Build Custom Box 📦
+        </a>
+      </div>
     </div>
   </div>
 </div>
+
+<script>
+  (function() {
+    // Master Category Mapping & Tag Synonyms
+    const CATEGORIES = {
+      'all': {
+        title: 'Corporate Hampers & Celebration Gifts',
+        desc: 'Explore ready-to-ship luxury hampers, branded crates, and custom gift bundles. Zero payment upfront — custom laser engraving included on 25+ units.',
+        tags: []
+      },
+      'executive-combos': {
+        title: 'Executive Luxury Combos',
+        desc: 'Curated luxury hampers, gourmet treats, and handcrafted keepsakes for executive leadership and VIP clients.',
+        tags: ['executive-combos', 'executive_combos', 'executive', 'combos', 'luxury', 'category:executive-combos']
+      },
+      'employee-onboarding': {
+        title: 'Employee Welcome & Onboarding Kits',
+        desc: 'Thoughtful welcome boxes, branded notebooks, insulated tumblers, and custom swag kits for remote & in-office teams.',
+        tags: ['employee-onboarding', 'employee_onboarding', 'onboarding', 'welcome', 'welcome-kit', 'category:employee-onboarding']
+      },
+      'drinkware': {
+        title: 'Drinkware & Insulated Bottles',
+        desc: 'Smart temperature-sensing bottles, vacuum-insulated tumblers, and stainless steel corporate drinkware with custom laser branding.',
+        tags: ['drinkware', 'drinkware-bottles', 'bottle', 'bottles', 'flask', 'tumbler', 'mug', 'category:drinkware']
+      },
+      'diaries': {
+        title: 'Diaries & Executive Stationary',
+        desc: 'Personalized leather journals, executive planners, metallic rollerball pens, and desk organizers.',
+        tags: ['diaries', 'diaries-stationary', 'diary', 'journal', 'stationery', 'stationary', 'pen', 'notebook', 'category:diaries']
+      },
+      'apparel': {
+        title: 'Corporate Apparel & Bags',
+        desc: 'Bespoke embroidered polo tees, unisex hoodies, and professional laptop backpacks.',
+        tags: ['apparel', 'apparel-bags', 't-shirt', 'tshirt', 't shirt', 'clothing', 'hoodie', 'backpack', 'bag', 'category:apparel']
+      },
+      'festive': {
+        title: 'Diwali & Festive Celebration Hampers',
+        desc: 'Festive dry fruit boxes, artisanal sweets, brass diyas, and celebration crates.',
+        tags: ['festive', 'diwali', 'diwali-festive', 'holiday', 'celebration', 'category:festive']
+      },
+      'tech': {
+        title: 'Tech & Smart Gadgets',
+        desc: 'Wireless charging docks, Bluetooth speakers, executive powerbanks, and modern workplace gadgets.',
+        tags: ['tech', 'tech-audio', 'gadgets', 'gadget', 'audio', 'powerbank', 'category:tech']
+      }
+    };
+
+    window.applyCategoryFilter = function(catKey, updateUrl = true) {
+      const config = CATEGORIES[catKey] || CATEGORIES['all'];
+      
+      // Update Heading and Description
+      const headingEl = document.getElementById('collection-main-heading');
+      const descEl = document.getElementById('collection-desc-text');
+      const breadcrumbEl = document.getElementById('collection-breadcrumb-current');
+      if (headingEl) headingEl.textContent = config.title;
+      if (descEl) descEl.textContent = config.desc;
+      if (breadcrumbEl) breadcrumbEl.textContent = config.title;
+
+      // Update Filter Chips Active State
+      document.querySelectorAll('#category-filter-chips .filter-chip').forEach(chip => {
+        if (chip.dataset.cat === catKey) {
+          chip.classList.add('active');
+        } else {
+          chip.classList.remove('active');
+        }
+      });
+
+      // Filter Product Cards
+      const cards = document.querySelectorAll('[data-product-card="true"]');
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const cardTags = (card.dataset.tags || '').toLowerCase();
+        const cardTitle = (card.dataset.title || '').toLowerCase();
+
+        let isMatch = false;
+        if (catKey === 'all') {
+          // In "all", show everything except box builder packaging
+          isMatch = !cardTags.includes('custom:packaging');
+        } else {
+          // Check if any category tag or keyword matches
+          for (const t of config.tags) {
+            if (cardTags.includes(t) || cardTitle.includes(t)) {
+              isMatch = true;
+              break;
+            }
+          }
+        }
+
+        if (isMatch) {
+          card.style.display = 'flex';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // Update count badge
+      const countBadge = document.getElementById('collection-count-badge');
+      if (countBadge) {
+        countBadge.textContent = `(${visibleCount} Gifts Available)`;
+      }
+
+      // Empty state handler
+      const emptyState = document.getElementById('category-empty-state');
+      const grid = document.getElementById('main-products-grid');
+      if (emptyState) {
+        if (visibleCount === 0) {
+          emptyState.style.display = 'block';
+          const emptyTitle = document.getElementById('empty-state-title');
+          const emptyDesc = document.getElementById('empty-state-desc');
+          if (emptyTitle) emptyTitle.textContent = `No products tagged for "${config.title}" yet`;
+          if (emptyDesc) {
+            const primaryTag = config.tags[0] || catKey;
+            emptyDesc.innerHTML = `To display products here, edit your product in <strong>Shopify Admin &rarr; Products</strong> and add the tag: <code style="background: #f1f3f5; color: #e11d2d; padding: 2px 6px; border-radius: 4px; font-weight: 700;">${primaryTag}</code>.`;
+          }
+        } else {
+          emptyState.style.display = 'none';
+        }
+      }
+
+      // Update URL without reloading if requested
+      if (updateUrl && window.history && window.history.pushState) {
+        const newUrl = catKey === 'all' 
+          ? window.location.pathname 
+          : `${window.location.pathname}?category=${catKey}`;
+        window.history.pushState({ category: catKey }, config.title, newUrl);
+      }
+    };
+
+    // Auto-detect category on initial page load
+    document.addEventListener('DOMContentLoaded', function() {
+      // 1. Check path (e.g. /collections/all/drinkware)
+      const path = window.location.pathname.toLowerCase();
+      // 2. Check query param (e.g. ?category=drinkware or ?tag=drinkware)
+      const params = new URLSearchParams(window.location.search);
+      const queryCat = params.get('category') || params.get('tag');
+
+      let detectedCat = null;
+      if (queryCat && CATEGORIES[queryCat.toLowerCase()]) {
+        detectedCat = queryCat.toLowerCase();
+      } else {
+        for (const key of Object.keys(CATEGORIES)) {
+          if (key !== 'all' && path.includes(key)) {
+            detectedCat = key;
+            break;
+          }
+        }
+      }
+
+      // If detected, apply filter immediately
+      if (detectedCat) {
+        applyCategoryFilter(detectedCat, false);
+      } else {
+        // Run initial count
+        applyCategoryFilter('all', false);
+      }
+    });
+
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', function(e) {
+      if (e.state && e.state.category) {
+        applyCategoryFilter(e.state.category, false);
+      } else {
+        applyCategoryFilter('all', false);
+      }
+    });
+  })();
+</script>
 
 {% schema %}
 {

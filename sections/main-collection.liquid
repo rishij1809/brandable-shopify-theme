@@ -1,47 +1,65 @@
 {% comment %}
   Brandable Main Collection Template
-  Displays standalone hampers and items tagged 'custom:standalone'
+  Shop / Catalog Multi-Page Template with category tabs and coral cards
 {% endcomment %}
 
-<div class="container" style="padding: 3rem 1.5rem;">
-  <div style="margin-bottom: 2rem;">
-    <h1>{{ collection.title | default: 'Corporate Hampers & Catalog' }}</h1>
-    {% if collection.description != blank %}
-      <div style="color: var(--color-text-muted);">{{ collection.description }}</div>
-    {% endif %}
+<div class="container" style="padding: 2.5rem 1.5rem 4rem;">
+  <div class="page-hero-banner" style="margin-bottom: 2.5rem; padding: 2.5rem 1.5rem;">
+    <span class="hero-pill-badge" style="background: rgba(255,255,255,0.25);">Catalog & Hampers</span>
+    <h1 style="font-size: 2.5rem;">{{ collection.title | default: 'Corporate Hampers & Gifts' }}</h1>
+    <p>{{ collection.description | default: 'Explore ready-to-ship luxury hampers, branded crates, and custom gift bundles.' }}</p>
   </div>
 
   <div class="product-grid">
     {% for product in collection.products %}
-      <div class="product-card" style="cursor: default;">
-        <a href="{{ product.url }}" style="text-decoration: none; color: inherit;">
-          <img src="{{ product.featured_image | image_url: width: 400 }}" 
-               alt="{{ product.title | escape }}" 
-               loading="lazy" 
-               width="400" 
-               height="400">
-          <h3 class="card-title">{{ product.title }}</h3>
-          <div class="card-price">{{ product.price | money }}</div>
-        </a>
+      {% assign variant = product.selected_or_first_available_variant | default: product.variants.first %}
+      <div class="product-card-coral">
+        <div class="product-card-media">
+          <span class="product-badge-pill">Customizable</span>
+          <a href="{{ product.url }}" style="display: block; width: 100%; height: 100%;">
+            {% if product.featured_image %}
+              <img src="{{ product.featured_image | image_url: width: 600 }}" 
+                   alt="{{ product.title | escape }}" 
+                   loading="lazy" 
+                   width="600" 
+                   height="450">
+            {% else %}
+              <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=600&q=80" 
+                   alt="{{ product.title | escape }}" 
+                   loading="lazy" 
+                   width="600" 
+                   height="450">
+            {% endif %}
+          </a>
+        </div>
 
-        <div class="product-card-actions">
-          <form action="/cart/add" method="post" style="flex: 1;">
-            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-            <input type="hidden" name="quantity" value="1">
-            <button type="submit" class="btn btn-secondary" style="width: 100%; padding: 0.6rem 0.4rem; font-size: 0.78rem;">
-              + Add to Basket
+        <div class="product-card-body">
+          <h3><a href="{{ product.url }}">{{ product.title }}</a></h3>
+          <div class="product-card-subtitle">MOQ: 10 units &bull; Tiered Volume Pricing Available</div>
+        </div>
+
+        <div class="product-card-footer">
+          <div class="product-card-price">{{ product.price | money }}</div>
+          <div style="display: flex; gap: 0.5rem;">
+            <form action="/cart/add" method="post">
+              <input type="hidden" name="id" value="{{ variant.id }}">
+              <input type="hidden" name="quantity" value="1">
+              <button type="submit" class="btn-pill-quote" style="border-color: #dee2e6; color: #495057;">
+                + Basket
+              </button>
+            </form>
+            <button type="button" 
+                    class="btn-pill-quote" 
+                    onclick="openQuoteModal({ title: {{ product.title | json }}, price: {{ product.price | money | json }} })">
+              Quote &rarr;
             </button>
-          </form>
-          <button type="button" 
-                  class="btn btn-crimson" 
-                  style="flex: 1.2; padding: 0.6rem 0.4rem; font-size: 0.78rem;" 
-                  onclick="openQuoteModal({ title: {{ product.title | json }}, price: {{ product.price | money | json }} })">
-            Request Quote
-          </button>
+          </div>
         </div>
       </div>
     {% else %}
-      <p class="text-muted" style="grid-column: 1/-1;">No products found in this collection.</p>
+      <p class="text-muted" style="grid-column: 1/-1; text-align: center; padding: 3rem 0;">
+        No products found in this collection.
+      </p>
     {% endfor %}
   </div>
 </div>
@@ -52,4 +70,3 @@
   "settings": []
 }
 {% endschema %}
-

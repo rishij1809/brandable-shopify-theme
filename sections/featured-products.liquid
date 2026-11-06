@@ -1,28 +1,22 @@
-{% comment %}
-  Brandable Featured Products Section
-  Displays curated corporate hampers with instant Lead-Gen "Request Quote" modal trigger
-{% endcomment %}
-
 <section class="products-section">
   <div class="container">
-    <div class="section-header-centered">
-      <span class="section-tag">Corporate Favorites</span>
-      <h2 class="section-title">{{ section.settings.heading | default: 'Popular Pre-Made Hampers' }}</h2>
-      <p class="section-subtitle">
-        {{ section.settings.subheading | default: 'Ready-to-brand luxury gift hampers curated for executive gifting and client appreciation.' }}
-      </p>
+    <div class="section-pill-header" style="margin-bottom: 2.5rem;">
+      <h2>Popular Corporate Hampers & Gifts</h2>
+      <div class="dots-divider">
+        <span></span><span></span><span></span>
+      </div>
     </div>
 
     <div class="product-grid">
-      {% assign found_products = false %}
+      {% assign count = 0 %}
       {% for product in collections.all.products limit: 8 %}
         {% unless product.tags contains 'custom:packaging' or product.tags contains 'custom:box_item' %}
-          {% assign found_products = true %}
-          {% assign variant = product.selected_or_first_available_variant %}
-          <div class="product-card">
-            <span class="product-badge">Customizable</span>
-            <div class="product-card-img-wrap">
-              <a href="{{ product.url }}">
+          {% assign count = count | plus: 1 %}
+          {% assign variant = product.selected_or_first_available_variant | default: product.variants.first %}
+          <div class="product-card-coral">
+            <div class="product-card-media">
+              <span class="product-badge-pill">Hot 🔥</span>
+              <a href="{{ product.url }}" style="display: block; width: 100%; height: 100%;">
                 {% if product.featured_image %}
                   <img src="{{ product.featured_image | image_url: width: 600 }}" 
                        alt="{{ product.title | escape }}" 
@@ -39,21 +33,15 @@
               </a>
             </div>
 
-            <h3><a href="{{ product.url }}" style="color: inherit; text-decoration: none;">{{ product.title }}</a></h3>
-            <div class="product-card-meta">MOQ: 10 units &bull; Tiered Pricing Available</div>
-            <div class="product-card-price">{{ product.price | money }} <small style="font-size: 0.75rem; color: #666; font-weight: normal;">/ estimated base</small></div>
+            <div class="product-card-body">
+              <h3><a href="{{ product.url }}">{{ product.title }}</a></h3>
+              <div class="product-card-subtitle">MOQ: 10 units &bull; Includes Custom Logo Branding</div>
+            </div>
 
-            <div class="product-card-actions">
-              <form action="/cart/add" method="post" style="flex: 1;">
-                <input type="hidden" name="id" value="{{ variant.id }}">
-                <input type="hidden" name="quantity" value="1">
-                <button type="submit" class="btn btn-secondary" style="width: 100%; padding: 0.6rem 0.5rem; font-size: 0.78rem;">
-                  + Add to Basket
-                </button>
-              </form>
+            <div class="product-card-footer">
+              <div class="product-card-price">{{ product.price | money }}</div>
               <button type="button" 
-                      class="btn btn-crimson" 
-                      style="flex: 1.2; padding: 0.6rem 0.5rem; font-size: 0.78rem;" 
+                      class="btn-pill-quote" 
                       onclick="openQuoteModal({ title: {{ product.title | json }}, price: {{ product.price | money | json }} })">
                 Request Quote
               </button>
@@ -62,106 +50,94 @@
         {% endunless %}
       {% endfor %}
 
-      {% if found_products == false %}
-        <!-- Demo Previews if store catalog is empty -->
-        <div class="product-card">
-          <span class="product-badge">Best Seller</span>
-          <div class="product-card-img-wrap">
-            <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=600&q=80" 
-                 alt="The Executive Hamper" 
-                 width="600" 
-                 height="450">
+      {% if count == 0 %}
+        <!-- Demo Curated Hampers matching the visual style -->
+        <div class="product-card-coral">
+          <div class="product-card-media">
+            <span class="product-badge-pill">20% Off</span>
+            <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=600&q=80" alt="The Executive Reserve Hamper">
           </div>
-          <h3>The Executive Reserve Hamper</h3>
-          <div class="product-card-meta">MOQ: 10 units &bull; Includes Custom Logo Engraved Lid</div>
-          <div class="product-card-price">$125.00 <small style="font-size: 0.75rem; color: #666; font-weight: normal;">/ estimated base</small></div>
-          <div class="product-card-actions">
-            <button type="button" class="btn btn-crimson" style="width: 100%; font-size: 0.85rem;" onclick="openQuoteModal({ title: 'The Executive Reserve Hamper', price: '$125.00' })">
-              Request Hamper Quote &rarr;
+          <div class="product-card-body">
+            <h3>The Executive Reserve Hamper</h3>
+            <div class="product-card-subtitle">Luxury Wine & Artisan Delights</div>
+          </div>
+          <div class="product-card-footer">
+            <div class="product-card-price">$120.00</div>
+            <button type="button" class="btn-pill-quote" onclick="openQuoteModal({ title: 'The Executive Reserve Hamper', price: '$120.00' })">
+              Request Quote
             </button>
           </div>
         </div>
 
-        <div class="product-card">
-          <span class="product-badge">New Arrival</span>
-          <div class="product-card-img-wrap">
-            <img src="https://images.unsplash.com/photo-1513297887119-d46091b24bfa?auto=format&fit=crop&w=600&q=80" 
-                 alt="Artisan Gourmet Treats Crate" 
-                 width="600" 
-                 height="450">
+        <div class="product-card-coral">
+          <div class="product-card-media">
+            <span class="product-badge-pill">New</span>
+            <img src="https://images.unsplash.com/photo-1513297887119-d46091b24bfa?auto=format&fit=crop&w=600&q=80" alt="Artisan Gourmet Treats Crate">
           </div>
-          <h3>Artisan Gourmet Treats Crate</h3>
-          <div class="product-card-meta">MOQ: 15 units &bull; Small-batch treats & specialty coffee</div>
-          <div class="product-card-price">$85.00 <small style="font-size: 0.75rem; color: #666; font-weight: normal;">/ estimated base</small></div>
-          <div class="product-card-actions">
-            <button type="button" class="btn btn-crimson" style="width: 100%; font-size: 0.85rem;" onclick="openQuoteModal({ title: 'Artisan Gourmet Treats Crate', price: '$85.00' })">
-              Request Hamper Quote &rarr;
+          <div class="product-card-body">
+            <h3>Artisan Gourmet Treats Crate</h3>
+            <div class="product-card-subtitle">Small-batch treats & specialty coffee</div>
+          </div>
+          <div class="product-card-footer">
+            <div class="product-card-price">$85.00</div>
+            <button type="button" class="btn-pill-quote" onclick="openQuoteModal({ title: 'Artisan Gourmet Treats Crate', price: '$85.00' })">
+              Request Quote
             </button>
           </div>
         </div>
 
-        <div class="product-card">
-          <span class="product-badge">Team Favorite</span>
-          <div class="product-card-img-wrap">
-            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80" 
-                 alt="Remote Employee Welcome Kit" 
-                 width="600" 
-                 height="450">
+        <div class="product-card-coral">
+          <div class="product-card-media">
+            <span class="product-badge-pill">Hot 🔥</span>
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80" alt="Employee Welcome & Swag Kit">
           </div>
-          <h3>Employee Welcome & Swag Kit</h3>
-          <div class="product-card-meta">MOQ: 10 units &bull; Branded tumbler, notebook, and snacks</div>
-          <div class="product-card-price">$65.00 <small style="font-size: 0.75rem; color: #666; font-weight: normal;">/ estimated base</small></div>
-          <div class="product-card-actions">
-            <button type="button" class="btn btn-crimson" style="width: 100%; font-size: 0.85rem;" onclick="openQuoteModal({ title: 'Employee Welcome & Swag Kit', price: '$65.00' })">
-              Request Hamper Quote &rarr;
+          <div class="product-card-body">
+            <h3>Employee Welcome & Swag Kit</h3>
+            <div class="product-card-subtitle">Branded tumbler, notebook, and snacks</div>
+          </div>
+          <div class="product-card-footer">
+            <div class="product-card-price">$65.00</div>
+            <button type="button" class="btn-pill-quote" onclick="openQuoteModal({ title: 'Employee Welcome & Swag Kit', price: '$65.00' })">
+              Request Quote
             </button>
           </div>
         </div>
 
-        <div class="product-card">
-          <span class="product-badge">Holiday Classic</span>
-          <div class="product-card-img-wrap">
-            <img src="https://images.unsplash.com/photo-1607344645866-009c320b5ab8?auto=format&fit=crop&w=600&q=80" 
-                 alt="Fireside Comforts Wellness Box" 
-                 width="600" 
-                 height="450">
+        <div class="product-card-coral">
+          <div class="product-card-media">
+            <span class="product-badge-pill">Sale</span>
+            <img src="https://images.unsplash.com/photo-1607344645866-009c320b5ab8?auto=format&fit=crop&w=600&q=80" alt="Fireside Comforts Wellness Box">
           </div>
-          <h3>Fireside Comforts Wellness Box</h3>
-          <div class="product-card-meta">MOQ: 10 units &bull; Aromatherapy candle, cozy socks & tea</div>
-          <div class="product-card-price">$95.00 <small style="font-size: 0.75rem; color: #666; font-weight: normal;">/ estimated base</small></div>
-          <div class="product-card-actions">
-            <button type="button" class="btn btn-crimson" style="width: 100%; font-size: 0.85rem;" onclick="openQuoteModal({ title: 'Fireside Comforts Wellness Box', price: '$95.00' })">
-              Request Hamper Quote &rarr;
+          <div class="product-card-body">
+            <h3>Fireside Comforts Wellness Box</h3>
+            <div class="product-card-subtitle">Aromatherapy candle, cozy socks & tea</div>
+          </div>
+          <div class="product-card-footer">
+            <div class="product-card-price">$95.00</div>
+            <button type="button" class="btn-pill-quote" onclick="openQuoteModal({ title: 'Fireside Comforts Wellness Box', price: '$95.00' })">
+              Request Quote
             </button>
           </div>
         </div>
       {% endif %}
+    </div>
+
+    <div style="text-align: center; margin-top: 3.5rem;">
+      <a href="/collections/all" class="btn btn-primary" style="padding: 0.9rem 2.5rem; font-size: 1rem;">
+        Explore Entire Catalog &rarr;
+      </a>
     </div>
   </div>
 </section>
 
 {% schema %}
 {
-  "name": "Featured Hampers Grid",
-  "settings": [
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Popular Pre-Made Hampers"
-    },
-    {
-      "type": "text",
-      "id": "subheading",
-      "label": "Subheading",
-      "default": "Ready-to-brand luxury gift hampers curated for executive gifting and client appreciation."
-    }
-  ],
+  "name": "Featured Products Coral",
+  "settings": [],
   "presets": [
     {
-      "name": "Featured Hampers Grid"
+      "name": "Featured Products Coral"
     }
   ]
 }
 {% endschema %}
-

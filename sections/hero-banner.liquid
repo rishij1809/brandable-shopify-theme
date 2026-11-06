@@ -1,25 +1,60 @@
-<section class="hero-banner-section">
+<section class="hero-wrapper">
   <div class="container">
-    <div class="hero-content-wrapper">
+    <div class="hero-card">
+      <!-- Left Content Column -->
       <div>
-        <span class="hero-tag">✨ Corporate Gifting & Holiday Sale</span>
-        <h1 class="hero-title">Custom Gift Boxes & Luxury Corporate Hampers</h1>
-        <p class="hero-subtitle">
-          Elevate your corporate relationships. Choose ready-to-ship luxury hampers or design custom branded gift boxes with full logo personalization. Zero payment upfront.
+        <span class="hero-pill-badge">✨ Exclusive Corporate Gifting &bull; Bulk Discounts Available</span>
+        <h1>Curated Corporate Gift Boxes & Hampers</h1>
+        <p class="hero-desc">
+          Hand-picked artisan goodies, laser-engraved branding, and white-glove multi-address drop shipping worldwide. Zero payment upfront.
         </p>
-        <div class="hero-btn-group">
-          <a href="/#box-builder" class="btn btn-green">Build a Custom Box &rarr;</a>
-          <a href="/collections/all" class="btn btn-crimson">Browse Hampers</a>
-          <button type="button" class="btn btn-secondary" onclick="openQuoteModal()">Request Custom Quote</button>
+
+        <!-- Category Pill Selector (Directly matching reference image) -->
+        <div class="hero-category-selector">
+          <select id="hero-category-select" onchange="if(this.value) window.location.href=this.value;">
+            <option value="/collections/all">Select Category...</option>
+            <option value="/pages/box-builder">Custom Gift Boxes (Builder)</option>
+            <option value="/collections/all">Executive Reserve Hampers</option>
+            <option value="/collections/all">Employee Onboarding Kits</option>
+            <option value="/collections/all">Artisan Chocolates & Coffees</option>
+            <option value="/collections/all">Wellness & Team Care</option>
+          </select>
+          <a href="/collections/all" class="hero-selector-btn">
+            <span>Explore Hampers</span>
+            <span>&rarr;</span>
+          </a>
+        </div>
+
+        <!-- Social Proof Avatar Cluster (Matching reference image) -->
+        <div class="hero-social-proof">
+          <div class="avatar-group">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Client 1">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Client 2">
+            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=100&q=80" alt="Client 3">
+          </div>
+          <div class="social-proof-text">
+            <strong>Trusted by 1,200+ Companies</strong>
+            <span class="social-proof-stars">★★★★★ 4.9 Rating</span>
+          </div>
+        </div>
+
+        <!-- Bottom Pill Link -->
+        <div class="hero-bottom-link">
+          <span>Planning a Custom Project?</span>
+          <button type="button" onclick="openQuoteModal()">Request Custom Quote</button>
         </div>
       </div>
 
-      <div class="hero-image-box">
-        <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=900&q=80" 
-             alt="Luxury Corporate Gifting" 
-             loading="eager" 
-             width="900" 
-             height="600">
+      <!-- Right Visual Column (Circular Frame & Hamper Imagery) -->
+      <div class="hero-visual-col">
+        <div class="hero-circle-backdrop">
+          <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=800&q=80" 
+               alt="Luxury Corporate Gifting Hamper" 
+               class="hero-visual-img" 
+               loading="eager" 
+               width="800" 
+               height="600">
+        </div>
       </div>
     </div>
   </div>
@@ -27,13 +62,12 @@
 
 {% schema %}
 {
-  "name": "Hero Banner",
+  "name": "Hero Banner Pill",
   "settings": [],
   "presets": [
     {
-      "name": "Hero Banner"
+      "name": "Hero Banner Pill"
     }
   ]
 }
 {% endschema %}
-

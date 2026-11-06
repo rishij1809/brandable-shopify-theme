@@ -95,47 +95,307 @@
     </div>
   </div>
 
-  <!-- Secondary Category Ribbon (IGP Horizontal Bar) -->
+  <!-- Secondary Navigation Strip (Clean & Uncrowded - Zero Horizontal Scrollbar) -->
   <nav class="igp-category-bar">
     <div class="container igp-category-container">
-      <a href="/collections/all" class="igp-cat-link {% if request.page_type == 'collection' and current_tags == blank %}active{% endif %}" data-category="all">
-        All Hampers
-      </a>
-      <a href="/#box-builder" class="igp-cat-link">
-        Build a Box <span class="igp-ribbon-tag">CUSTOM</span>
-      </a>
-      <a href="/collections/all/executive-combos" class="igp-cat-link {% if current_tags contains 'executive-combos' or current_tags contains 'executive' %}active{% endif %}" data-category="executive-combos">
-        Executive Combos
-      </a>
-      <a href="/collections/all/employee-onboarding" class="igp-cat-link {% if current_tags contains 'employee-onboarding' or current_tags contains 'onboarding' %}active{% endif %}" data-category="employee-onboarding">
-        Employee Onboarding
-      </a>
-      <a href="/collections/all/drinkware" class="igp-cat-link {% if current_tags contains 'drinkware' or current_tags contains 'bottles' %}active{% endif %}" data-category="drinkware">
-        Drinkware & Bottles
-      </a>
-      <a href="/collections/all/diaries" class="igp-cat-link {% if current_tags contains 'diaries' or current_tags contains 'stationery' %}active{% endif %}" data-category="diaries">
-        Diaries & Stationary
-      </a>
-      <a href="/collections/all/apparel" class="igp-cat-link {% if current_tags contains 'apparel' or current_tags contains 'tshirts' %}active{% endif %}" data-category="apparel">
-        Apparel & Bags
-      </a>
-      <a href="/collections/all/festive" class="igp-cat-link {% if current_tags contains 'festive' or current_tags contains 'diwali' %}active{% endif %}" data-category="festive">
-        Diwali & Festive
-      </a>
-      <a href="/#how-it-works" class="igp-cat-link">
-        How It Works
-      </a>
-      <a href="/pages/about" class="igp-cat-link {% if request.path contains 'about' %}active{% endif %}">
-        About Brandable
-      </a>
-      <a href="/pages/contact" class="igp-cat-link {% if request.path contains 'contact' %}active{% endif %}">
-        Contact Concierge
-      </a>
+      <!-- Side Nav Drawer Trigger Button -->
+      <button type="button" class="side-panel-toggle-btn" id="openSideNavBtn" onclick="openSideNav()" aria-label="Open side panel category directory">
+        <svg class="hamburger-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+        <span class="toggle-btn-label">All Categories &amp; Details</span>
+        <span class="toggle-btn-badge">Explore</span>
+      </button>
+
+      <!-- Essential Quick Links -->
+      <div class="header-quick-links">
+        <a href="/collections/all" class="header-quick-link {% if request.page_type == 'collection' and current_tags == blank %}active{% endif %}">
+          All Hampers
+        </a>
+        <a href="/#box-builder" class="header-quick-link header-quick-link-highlight">
+          Build a Box <span class="custom-badge-pill">CUSTOM</span>
+        </a>
+        <a href="/#how-it-works" class="header-quick-link">
+          How It Works
+        </a>
+        <a href="/pages/about" class="header-quick-link {% if request.path contains 'about' %}active{% endif %}">
+          About Brandable
+        </a>
+        <a href="/pages/contact" class="header-quick-link {% if request.path contains 'contact' %}active{% endif %}">
+          Contact Concierge
+        </a>
+      </div>
+
+      <!-- Hotline Callout on right of bar -->
+      <div class="header-hotline-callout">
+        <span class="hotline-icon">📞</span>
+        <span>Concierge: <strong>+91 98765 43210</strong></span>
+      </div>
     </div>
   </nav>
 </header>
 
+<!-- Side Navigation Backdrop Overlay -->
+<div class="side-nav-backdrop" id="sideNavBackdrop" onclick="closeSideNav()"></div>
+
+<!-- Slide-Out Side Navigation Drawer -->
+<aside class="side-nav-drawer" id="sideNavDrawer" aria-label="Department and Category Directory">
+  <!-- Side Nav Header -->
+  <div class="side-nav-header">
+    <div class="side-nav-brand">
+      <span class="side-nav-logo-symbol">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e11d2d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 12 20 22 4 22 4 12"></polyline>
+          <rect x="2" y="7" width="20" height="5"></rect>
+          <line x1="12" y1="22" x2="12" y2="7"></line>
+          <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+          <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+        </svg>
+      </span>
+      <div class="side-nav-brand-text">
+        <span class="side-nav-title">brandable</span>
+        <span class="side-nav-tagline">Department &amp; Section Catalog</span>
+      </div>
+    </div>
+    <button type="button" class="side-nav-close-btn" onclick="closeSideNav()" aria-label="Close navigation panel">
+      &times;
+    </button>
+  </div>
+
+  <!-- Side Nav Search -->
+  <div class="side-nav-search-wrap">
+    <form action="/search" method="get" class="side-nav-search-form">
+      <input type="text" name="q" placeholder="Search gifts, kits, bottles, tech..." class="side-nav-search-input">
+      <button type="submit" class="side-nav-search-submit" aria-label="Search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </button>
+    </form>
+  </div>
+
+  <!-- Side Nav Content (Sections with Full Details) -->
+  <div class="side-nav-body">
+    <div class="side-nav-intro-heading">
+      <span>Corporate Gifting Departments</span>
+      <small>Click any section to explore products &amp; specifications</small>
+    </div>
+
+    <!-- Section 1: Employee Onboarding -->
+    <a href="/collections/all/employee-onboarding" class="side-nav-card" onclick="closeSideNav()">
+      <div class="side-nav-card-head">
+        <span class="side-nav-card-icon">🎒</span>
+        <div class="side-nav-card-titles">
+          <h4>Employee Onboarding</h4>
+          <span class="side-nav-card-sub">Welcome Kits &amp; New Hire Swag Packs</span>
+        </div>
+        <span class="side-nav-card-arrow">&rarr;</span>
+      </div>
+      <p class="side-nav-card-desc">
+        Welcome new joiners with inspiring first-day kits. Thoughtfully curated to make Day 1 memorable with company pride. Includes high-density embroidered corporate apparel, laser-engraved matte steel bottles, vegan leather hardbound notebooks, tech swag, and personalized greeting letters from leadership.
+      </p>
+      <div class="side-nav-card-tags">
+        <span>👕 Branded Polo Tees / Hoodies</span>
+        <span>💧 Vacuum Insulated Bottles</span>
+        <span>📓 Hardbound Journals &amp; Pens</span>
+        <span>💻 Wireless Chargers &amp; Sleeves</span>
+        <span>💌 Custom Welcome Letters</span>
+      </div>
+    </a>
+
+    <!-- Section 2: Executive Combos -->
+    <a href="/collections/all/executive-combos" class="side-nav-card" onclick="closeSideNav()">
+      <div class="side-nav-card-head">
+        <span class="side-nav-card-icon">💼</span>
+        <div class="side-nav-card-titles">
+          <h4>Executive Combos</h4>
+          <span class="side-nav-card-sub">VIP &amp; C-Suite Luxury Hampers</span>
+        </div>
+        <span class="side-nav-card-arrow">&rarr;</span>
+      </div>
+      <p class="side-nav-card-desc">
+        High-impact luxury gift hampers curated for VIP clients, executive leadership, founders, and annual partner appreciation. Features premium vegan leather portfolio folios, gold/metallic rollerball pens, fast wireless charging docks, thermal carafes, and gourmet treats in magnetic keepsake boxes.
+      </p>
+      <div class="side-nav-card-tags">
+        <span>🖋️ Metallic Roller Pens</span>
+        <span>⚡ Qi Wireless Chargers</span>
+        <span>📁 Leather Portfolios</span>
+        <span>🍫 Artisan Chocolates</span>
+        <span>📦 Rigid Magnetic Box</span>
+      </div>
+    </a>
+
+    <!-- Section 3: Drinkware & Bottles -->
+    <a href="/collections/all/drinkware" class="side-nav-card" onclick="closeSideNav()">
+      <div class="side-nav-card-head">
+        <span class="side-nav-card-icon">☕</span>
+        <div class="side-nav-card-titles">
+          <h4>Drinkware &amp; Bottles</h4>
+          <span class="side-nav-card-sub">Insulated Flasks, Copper Sets &amp; Desk Sippers</span>
+        </div>
+        <span class="side-nav-card-arrow">&rarr;</span>
+      </div>
+      <p class="side-nav-card-desc">
+        Everyday hydration and beverage gear that keeps your brand visible on every desk. Features double-wall 304 stainless steel vacuum flasks (hot/cold 12-24h), LED smart temperature touch bottles, ceramic coffee mugs with wooden lids, pure copper wellness carafes &amp; infusers.
+      </p>
+      <div class="side-nav-card-tags">
+        <span>🌡️ Smart LED Bottles</span>
+        <span>❄️ Vacuum Flasks</span>
+        <span>🏺 Copper Carafes</span>
+        <span>☕ Ceramic Desk Mugs</span>
+        <span>🏷️ 360° Laser Engraving</span>
+      </div>
+    </a>
+
+    <!-- Section 4: Diaries & Stationary -->
+    <a href="/collections/all/diaries" class="side-nav-card" onclick="closeSideNav()">
+      <div class="side-nav-card-head">
+        <span class="side-nav-card-icon">📓</span>
+        <div class="side-nav-card-titles">
+          <h4>Diaries &amp; Stationary</h4>
+          <span class="side-nav-card-sub">Executive Planners, Journals &amp; Pen Sets</span>
+        </div>
+        <span class="side-nav-card-arrow">&rarr;</span>
+      </div>
+      <p class="side-nav-card-desc">
+        Elevate every workstation and meeting room with executive writing stationery. Includes A5 hardbound vegan leather journals, undated daily planners, metallic twist pens, eco-friendly cork notebooks, sticky memo blocks &amp; desk organizers with custom foil debossing.
+      </p>
+      <div class="side-nav-card-tags">
+        <span>📖 Leather Notebooks</span>
+        <span>🗓️ Undated Planners</span>
+        <span>🌿 Cork Stationery</span>
+        <span>🖊️ Heavy Metal Pens</span>
+        <span>✨ Gold Foil Debossing</span>
+      </div>
+    </a>
+
+    <!-- Section 5: Apparel & Bags -->
+    <a href="/collections/all/apparel" class="side-nav-card" onclick="closeSideNav()">
+      <div class="side-nav-card-head">
+        <span class="side-nav-card-icon">👕</span>
+        <div class="side-nav-card-titles">
+          <h4>Apparel &amp; Bags</h4>
+          <span class="side-nav-card-sub">Corporate Polo Tees, Hoodies &amp; Laptop Backpacks</span>
+        </div>
+        <span class="side-nav-card-arrow">&rarr;</span>
+      </div>
+      <p class="side-nav-card-desc">
+        Premium company wear and commuter gear that teams wear with pride. Features 100% combed cotton &amp; dry-fit polo shirts, fleece hoodies, anti-theft laptop backpacks with padded 15.6" sleeves and USB ports, canvas conference totes &amp; travel duffels.
+      </p>
+      <div class="side-nav-card-tags">
+        <span>👕 Polo &amp; Dry-Fit Tees</span>
+        <span>🧥 Corporate Hoodies</span>
+        <span>🎒 Laptop Backpacks</span>
+        <span>👜 Canvas Totes</span>
+        <span>🧵 Precision Embroidery</span>
+      </div>
+    </a>
+
+    <!-- Section 6: Diwali & Festive -->
+    <a href="/collections/all/festive" class="side-nav-card" onclick="closeSideNav()">
+      <div class="side-nav-card-head">
+        <span class="side-nav-card-icon">🪔</span>
+        <div class="side-nav-card-titles">
+          <h4>Diwali &amp; Festive</h4>
+          <span class="side-nav-card-sub">Celebration Hampers, Dry Fruits &amp; Brass Keepsakes</span>
+        </div>
+        <span class="side-nav-card-arrow">&rarr;</span>
+      </div>
+      <p class="side-nav-card-desc">
+        Auspicious gifting collections for Diwali, New Year, and festivals. Features vacuum-sealed jumbo cashews and California almonds, handcrafted brass diyas, organic scented soy candles, gourmet sweets, and keepsake festive trunks.
+      </p>
+      <div class="side-nav-card-tags">
+        <span>🌰 Premium Dry Fruits</span>
+        <span>🪔 Brass Diyas &amp; Decor</span>
+        <span>🕯️ Scented Soy Candles</span>
+        <span>🎁 Keepsake Wooden Trunks</span>
+        <span>📜 Greeting Card with CEO Sign</span>
+      </div>
+    </a>
+
+    <!-- Section 7: Build a Box (Custom 3-Step) -->
+    <a href="/#box-builder" class="side-nav-card side-nav-card-highlight" onclick="closeSideNav()">
+      <div class="side-nav-card-head">
+        <span class="side-nav-card-icon">🎁</span>
+        <div class="side-nav-card-titles">
+          <h4>Build a Custom Box</h4>
+          <span class="side-nav-card-sub">Interactive 3-Step Bespoke Hamper Builder</span>
+        </div>
+        <span class="side-nav-card-arrow">&rarr;</span>
+      </div>
+      <p class="side-nav-card-desc">
+        Design your own bespoke branded hamper from scratch. Step 1: Choose rigid box packaging. Step 2: Handpick goodies. Step 3: Add personal greeting card &amp; upload company logo for free 3D digital proof.
+      </p>
+      <div class="side-nav-card-tags">
+        <span>📦 Custom Rigid Boxes</span>
+        <span>✨ Mix &amp; Match Goodies</span>
+        <span>🏷️ Free Logo Proof</span>
+        <span>⚡ Zero Upfront Payment</span>
+      </div>
+    </a>
+
+    <!-- Section 8: All Hampers -->
+    <a href="/collections/all" class="side-nav-card" onclick="closeSideNav()">
+      <div class="side-nav-card-head">
+        <span class="side-nav-card-icon">✨</span>
+        <div class="side-nav-card-titles">
+          <h4>All Corporate Hampers</h4>
+          <span class="side-nav-card-sub">Browse Full Ready-to-Ship B2B Catalog</span>
+        </div>
+        <span class="side-nav-card-arrow">&rarr;</span>
+      </div>
+      <p class="side-nav-card-desc">
+        Explore our complete catalog of 50+ pre-curated corporate gift sets, employee kits, tech gear, and celebration hampers with bulk volume pricing and pan-India doorstep delivery.
+      </p>
+    </a>
+
+    <!-- Quick Concierge Assistance in Side Panel -->
+    <div class="side-nav-concierge-card">
+      <div class="concierge-card-title">Corporate Concierge Desk</div>
+      <p class="concierge-card-text">Need urgent assistance or high-volume custom quotes (100+ units)?</p>
+      <div class="concierge-contact-links">
+        <a href="tel:+919876543210" class="concierge-link">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          <span>+91 98765 43210</span>
+        </a>
+        <a href="mailto:gifting@brandable.example.com" class="concierge-link">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          <span>gifting@brandable.example.com</span>
+        </a>
+      </div>
+      <button type="button" class="btn-igp-primary" style="width: 100%; margin-top: 0.75rem; padding: 0.65rem;" onclick="closeSideNav(); openQuoteModal();">
+        Request Instant Quote &rarr;
+      </button>
+    </div>
+  </div>
+</aside>
+</header>
+
 <script>
+  function openSideNav() {
+    const drawer = document.getElementById('sideNavDrawer');
+    const backdrop = document.getElementById('sideNavBackdrop');
+    if (drawer) drawer.classList.add('active');
+    if (backdrop) backdrop.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSideNav() {
+    const drawer = document.getElementById('sideNavDrawer');
+    const backdrop = document.getElementById('sideNavBackdrop');
+    if (drawer) drawer.classList.remove('active');
+    if (backdrop) backdrop.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeSideNav();
+      const dropdown = document.getElementById('igp-city-dropdown');
+      if (dropdown) dropdown.classList.remove('show');
+    }
+  });
+
   function toggleCityDropdown(e) {
     e.stopPropagation();
     const dropdown = document.getElementById('igp-city-dropdown');

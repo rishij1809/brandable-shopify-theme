@@ -49,15 +49,35 @@
       <span class="breadcrumb-current" id="collection-breadcrumb-current">{{ active_title }}</span>
     </nav>
 
-    <!-- Collection Header & Description -->
-    <div class="igp-collection-header">
-      <div class="collection-title-wrap">
-        <h1 id="collection-main-heading">{{ active_title }}</h1>
-        <span class="collection-count" id="collection-count-badge">({{ collection.products_count | default: 0 }} Gifts Available)</span>
+    <!-- Category Deep Details Showcase Banner -->
+    <div class="category-detail-showcase" id="categoryDetailShowcase">
+      <div class="showcase-header">
+        <span class="showcase-icon" id="showcaseIcon">✨</span>
+        <div>
+          <span class="showcase-badge" id="showcaseBadge">DEPARTMENT OVERVIEW</span>
+          <h1 id="collection-main-heading">{{ active_title }}</h1>
+        </div>
+        <span class="collection-count" id="collection-count-badge" style="margin-left: auto; font-size: 0.88rem; font-weight: 600; color: #64748b;">({{ collection.products_count | default: 0 }} Gifts Available)</span>
       </div>
-      <p class="collection-desc" id="collection-desc-text">
+      <p class="showcase-description" id="collection-desc-text">
         {{ active_desc }}
       </p>
+      <div class="showcase-what-included">
+        <span class="what-included-label">What kind of products does this section have:</span>
+        <div class="what-included-chips" id="whatIncludedChips">
+          <span class="what-included-chip">🎁 Curated Corporate Hampers</span>
+          <span class="what-included-chip">👔 Custom Company Apparel</span>
+          <span class="what-included-chip">💧 Stainless Insulated Drinkware</span>
+          <span class="what-included-chip">📓 Executive Leather Diaries</span>
+          <span class="what-included-chip">⚡ Tech &amp; Smart Accessories</span>
+        </div>
+      </div>
+      <div class="showcase-b2b-guarantees">
+        <span>✓ Min. 25 Units</span>
+        <span>✓ Free 3D Logo Mockup</span>
+        <span>✓ Zero Upfront Payment</span>
+        <span>✓ Pan-India Delivery</span>
+      </div>
     </div>
 
     <!-- IGP Style Category & Tag Navigation Chips -->
@@ -208,46 +228,70 @@
 
 <script>
   (function() {
-    // Master Category Mapping & Tag Synonyms
+    // Master Category Mapping & Deep Section Details
     const CATEGORIES = {
       'all': {
+        icon: '✨',
+        badge: 'COMPLETE B2B CATALOG',
         title: 'Corporate Hampers & Celebration Gifts',
         desc: 'Explore ready-to-ship luxury hampers, branded crates, and custom gift bundles. Zero payment upfront — custom laser engraving included on 25+ units.',
+        items: ['🎁 Curated Corporate Hampers', '👔 Custom Company Apparel', '💧 Stainless Insulated Drinkware', '📓 Executive Leather Diaries', '⚡ Tech & Smart Accessories'],
         tags: []
       },
+      'employee-onboarding': {
+        icon: '🎒',
+        badge: 'NEW HIRE SWAG & WELCOME KITS',
+        title: 'Employee Onboarding & Welcome Kits',
+        desc: 'Inspire and welcome new hires from Day 1. Thoughtfully curated to make their first impression memorable with company pride. Includes branded apparel, engraved steel bottles, vegan leather journals, tech accessories, and welcome greeting letters.',
+        items: ['👕 Custom Branded Polo Tees & Hoodies', '💧 Matte Steel Insulated Bottles (Laser Engraved)', '📓 Hardbound Vegan Leather Journals & Pens', '💻 Fast Wireless Charging Tech & Sleeves', '💌 Personalized CEO Welcome Letters & Badges'],
+        tags: ['employee-onboarding', 'employee_onboarding', 'onboarding', 'welcome', 'welcome-kit', 'swag', 'new-hire', 'category:employee-onboarding']
+      },
       'executive-combos': {
-        title: 'Executive Luxury Combos',
-        desc: 'Curated luxury hampers, gourmet treats, and handcrafted keepsakes for executive leadership and VIP clients.',
+        icon: '💼',
+        badge: 'VIP & C-SUITE CORPORATE GIFTS',
+        title: 'Executive Combos & Luxury Hampers',
+        desc: 'High-impact luxury gift sets curated for VIP clients, executive leadership, founders, and annual partner appreciation. Features luxury keepsakes, metallic pens, Qi wireless docks, and gourmet treats in magnetic keepsake boxes.',
+        items: ['🖋️ Metallic Twist & Rollerball Pens', '⚡ Qi Fast Wireless Charging Docks', '📁 Vegan Leather Portfolio Organizers', '🍫 Artisanal Belgian Dark Chocolates', '📦 Premium Rigid Magnetic Gift Boxes'],
         tags: ['executive-combos', 'executive_combos', 'executive', 'combos', 'luxury', 'category:executive-combos']
       },
-      'employee-onboarding': {
-        title: 'Employee Welcome & Onboarding Kits',
-        desc: 'Thoughtful welcome boxes, branded notebooks, insulated tumblers, and custom swag kits for remote & in-office teams.',
-        tags: ['employee-onboarding', 'employee_onboarding', 'onboarding', 'welcome', 'welcome-kit', 'category:employee-onboarding']
-      },
       'drinkware': {
-        title: 'Drinkware & Insulated Bottles',
-        desc: 'Smart temperature-sensing bottles, vacuum-insulated tumblers, and stainless steel corporate drinkware with custom laser branding.',
+        icon: '☕',
+        badge: 'HYDRATION & DESK DRINKWARE',
+        title: 'Drinkware, Insulated Flasks & Tumblers',
+        desc: 'Everyday hydration and beverage gear that keeps your brand visible daily. Engineered with double-wall 304 food-grade stainless steel with hot/cold retention.',
+        items: ['🌡️ Smart Touch LED Temperature Bottles', '❄️ Double-Wall Vacuum Insulated Flasks (24h Cold)', '🏺 Handcrafted Pure Copper Wellness Carafes', '☕ Ceramic Coffee Mugs with Wooden Coaster Lids', '🏷️ 360° Permanent Laser Engraving Included'],
         tags: ['drinkware', 'drinkware-bottles', 'bottle', 'bottles', 'flask', 'tumbler', 'mug', 'category:drinkware']
       },
       'diaries': {
-        title: 'Diaries & Executive Stationary',
-        desc: 'Personalized leather journals, executive planners, metallic rollerball pens, and desk organizers.',
+        icon: '📓',
+        badge: 'EXECUTIVE STATIONERY & WRITING',
+        title: 'Diaries, Planners & Executive Stationary',
+        desc: 'Elevate every workstation and conference room with timeless writing stationery, hardbound vegan leather journals, and daily productivity organizers.',
+        items: ['📖 A5 Hardbound Vegan Leather Journals', '🗓️ Undated Daily Goal & Project Planners', '🌿 Eco-Conscious Bamboo & Cork Stationery', '🖊️ Heavyweight Metallic Rollerball Pens', '✨ Custom Gold/Silver Foil Debossing'],
         tags: ['diaries', 'diaries-stationary', 'diary', 'journal', 'stationery', 'stationary', 'pen', 'notebook', 'category:diaries']
       },
       'apparel': {
-        title: 'Corporate Apparel & Bags',
-        desc: 'Bespoke embroidered polo tees, unisex hoodies, and professional laptop backpacks.',
+        icon: '👕',
+        badge: 'CORPORATE WEAR & COMMUTE BAGS',
+        title: 'Corporate Apparel & Professional Bags',
+        desc: 'Wearable brand identity and durable commute bags that teams wear with pride to offsites, hackathons, and client visits. Features Supima cotton and anti-theft backpacks.',
+        items: ['👕 100% Combed Supima Cotton & Dry-Fit Polo Tees', '🧥 Cozy Fleece Corporate Hoodies & Bombers', '🎒 Anti-Theft Water-Resistant Laptop Backpacks (USB Port)', '👜 Heavy-Duty Canvas Conference Totes & Duffels', '🧵 High-Density Precision Embroidery'],
         tags: ['apparel', 'apparel-bags', 't-shirt', 'tshirt', 't shirt', 'clothing', 'hoodie', 'backpack', 'bag', 'category:apparel']
       },
       'festive': {
+        icon: '🪔',
+        badge: 'FESTIVE CELEBRATIONS & SWEETS',
         title: 'Diwali & Festive Celebration Hampers',
-        desc: 'Festive dry fruit boxes, artisanal sweets, brass diyas, and celebration crates.',
+        desc: 'Auspicious gifting collections crafted to spread warmth, gratitude, and prosperity among employees, clients, and partners. Features dry fruit boxes, brass diyas, and gourmet treats.',
+        items: ['🌰 Vacuum-Sealed California Almonds & Jumbo Cashews', '🪔 Handcrafted Brass Peacock Diyas & Incense', '🕯️ Organic Scented Hand-Poured Soy Wax Candles', '🍫 Handcrafted Gourmet Indian Sweets & Truffles', '🎁 Keepsake Velvet-Lined Wooden Festive Trunks'],
         tags: ['festive', 'diwali', 'diwali-festive', 'holiday', 'celebration', 'category:festive']
       },
       'tech': {
-        title: 'Tech & Smart Gadgets',
-        desc: 'Wireless charging docks, Bluetooth speakers, executive powerbanks, and modern workplace gadgets.',
+        icon: '⚡',
+        badge: 'SMART WORKPLACE GADGETS',
+        title: 'Tech & Smart Corporate Gadgets',
+        desc: 'High-utility modern electronics and smart desktop accessories with custom laser etching. Wireless docks, Bluetooth audio, and executive power banks.',
+        items: ['⚡ Multi-Device Fast Wireless Charging Stations', '🔊 High-Fidelity Portable Bluetooth Speakers', '🔋 Slimline High-Capacity Metallic Power Banks', '💻 Padded Felt Laptop Sleeves & Cord Organizers'],
         tags: ['tech', 'tech-audio', 'gadgets', 'gadget', 'audio', 'powerbank', 'category:tech']
       }
     };
@@ -255,13 +299,23 @@
     window.applyCategoryFilter = function(catKey, updateUrl = true) {
       const config = CATEGORIES[catKey] || CATEGORIES['all'];
       
-      // Update Heading and Description
+      // Update Heading, Description & Deep Details Showcase
+      const iconEl = document.getElementById('showcaseIcon');
+      const badgeEl = document.getElementById('showcaseBadge');
       const headingEl = document.getElementById('collection-main-heading');
       const descEl = document.getElementById('collection-desc-text');
       const breadcrumbEl = document.getElementById('collection-breadcrumb-current');
+      const chipsEl = document.getElementById('whatIncludedChips');
+
+      if (iconEl) iconEl.textContent = config.icon || '✨';
+      if (badgeEl) badgeEl.textContent = config.badge || 'DEPARTMENT OVERVIEW';
       if (headingEl) headingEl.textContent = config.title;
       if (descEl) descEl.textContent = config.desc;
       if (breadcrumbEl) breadcrumbEl.textContent = config.title;
+
+      if (chipsEl && config.items) {
+        chipsEl.innerHTML = config.items.map(item => `<span class="what-included-chip">${item}</span>`).join('');
+      }
 
       // Update Filter Chips Active State
       document.querySelectorAll('#category-filter-chips .filter-chip').forEach(chip => {

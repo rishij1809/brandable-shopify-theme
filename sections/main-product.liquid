@@ -1,0 +1,65 @@
+{% comment %}
+  Brandable Main Product Template
+  For standalone items and pre-made hampers
+{% endcomment %}
+
+<div class="container" style="padding: 3rem 1.5rem;">
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem; align-items: start;">
+    <div>
+      {% if product.featured_image %}
+        <img src="{{ product.featured_image | image_url: width: 800 }}" 
+             alt="{{ product.title | escape }}" 
+             style="width: 100%; border-radius: var(--radius); border: 1px solid var(--color-border);">
+      {% endif %}
+    </div>
+
+    <div>
+      <h1 style="margin-top: 0;">{{ product.title }}</h1>
+      <div style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem; color: var(--color-primary);">
+        {{ product.price | money }}
+      </div>
+
+      <div style="margin-bottom: 2rem; color: var(--color-text);">
+        {{ product.description }}
+      </div>
+
+      <div style="background: #faf8f5; border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1.5rem; font-size: 0.85rem;">
+        <strong>B2B Tiered Volume Pricing Available:</strong>
+        <div style="margin-top: 0.4rem; color: #555;">
+          &bull; 10 - 49 units: Standard pricing<br>
+          &bull; 50 - 99 units: 10% volume discount + free card personalization<br>
+          &bull; 100+ units: 20% volume discount + custom laser engraving
+        </div>
+      </div>
+
+      <form action="/cart/add" method="post" id="ProductAddToCartForm" style="margin-bottom: 1rem;">
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        
+        <div class="form-group">
+          <label for="ProductQuantity">Estimated Units Needed (MOQ: 10)</label>
+          <input type="number" id="ProductQuantity" name="quantity" value="10" min="1" style="max-width: 140px;">
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+          <button type="submit" class="btn btn-secondary" style="flex: 1; min-width: 180px;">
+            + Add to Quote Basket
+          </button>
+          <button type="button" 
+                  class="btn btn-crimson" 
+                  style="flex: 1.2; min-width: 200px;" 
+                  onclick="openQuoteModal({ title: {{ product.title | json }}, price: {{ product.price | money | json }}, quantity: document.getElementById('ProductQuantity').value })">
+            Request Quote Now &rarr;
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product Information",
+  "settings": []
+}
+{% endschema %}
+

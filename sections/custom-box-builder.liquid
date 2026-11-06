@@ -1,0 +1,440 @@
+{% comment %}
+  Brandable Custom Box Builder Section
+  A 3-step state-driven wizard for creating bespoke gift bundles:
+  Step 1: Packaging (tag 'custom:packaging')
+  Step 2: Box Items (tag 'custom:box_item')
+  Step 3: Personalization (Note & Logo)
+{% endcomment %}
+
+<section id="box-builder" class="box-builder-section" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="wizard-header">
+      <h2>{{ section.settings.heading | default: 'Build Your Custom Gift Box' }}</h2>
+      <p class="builder-summary-text" id="builder-step-instructions">Step 1: Choose your box or crate style.</p>
+
+      <div class="wizard-steps">
+        <div class="wizard-step-indicator active" data-step-indicator="1">1. Packaging</div>
+        <div class="wizard-step-indicator" data-step-indicator="2">2. Select Goodies</div>
+        <div class="wizard-step-indicator" data-step-indicator="3">3. Personalize</div>
+      </div>
+    </div>
+
+    <!-- STEP 1: PACKAGING -->
+    <div class="builder-step-pane active" data-step-pane="1">
+      <div class="product-grid" id="packaging-grid">
+        {% assign packaging_count = 0 %}
+        {% for product in collections.all.products %}
+          {% if product.tags contains 'custom:packaging' %}
+            {% assign packaging_count = packaging_count | plus: 1 %}
+            {% assign variant = product.selected_or_first_available_variant | default: product.variants.first %}
+            <div class="product-card packaging-card" 
+                 data-id="{{ variant.id }}" 
+                 data-title="{{ product.title | escape }}" 
+                 data-price="{{ product.price | money }}">
+              <img src="{{ product.featured_image | image_url: width: 400 }}" 
+                   alt="{{ product.title | escape }}" 
+                   loading="lazy" 
+                   width="400" 
+                   height="400">
+              <h3 class="card-title">{{ product.title }}</h3>
+              <div class="card-price">{{ product.price | money }}</div>
+              <button type="button" class="btn btn-secondary select-packaging-btn">Select This Box</button>
+            </div>
+          {% endif %}
+        {% endfor %}
+
+        {% if packaging_count == 0 %}
+          <p class="text-muted" style="grid-column: 1/-1; text-align: center;">
+            No packaging options found. Please tag your box products with <code>custom:packaging</code>.
+          </p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- STEP 2: BOX ITEMS -->
+    <div class="builder-step-pane" data-step-pane="2">
+      <div class="product-grid" id="items-grid">
+        {% assign items_count = 0 %}
+        {% for product in collections.all.products %}
+          {% if product.tags contains 'custom:box_item' %}
+            {% assign items_count = items_count | plus: 1 %}
+            {% assign variant = product.selected_or_first_available_variant | default: product.variants.first %}
+            <div class="product-card item-card" 
+                 data-id="{{ variant.id }}" 
+                 data-title="{{ product.title | escape }}" 
+                 data-price="{{ product.price | money }}">
+              <img src="{{ product.featured_image | image_url: width: 400 }}" 
+                   alt="{{ product.title | escape }}" 
+                   loading="lazy" 
+                   width="400" 
+                   height="400">
+              <h3 class="card-title">{{ product.title }}</h3>
+              <div class="card-price">{{ product.price | money }}</div>
+              <div class="qty-control">
+                <button type="button" class="qty-btn btn-qty-minus" aria-label="Decrease">&minus;</button>
+                <span class="qty-val" data-qty-for="{{ variant.id }}">0</span>
+                <button type="button" class="qty-btn btn-qty-plus" aria-label="Increase">&#43;</button>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+
+        {% if items_count == 0 %}
+          <p class="text-muted" style="grid-column: 1/-1; text-align: center;">
+            No items found. Please tag your gift products with <code>custom:box_item</code>.
+          </p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- STEP 3: PERSONALIZATION -->
+    <div class="builder-step-pane" data-step-pane="3">
+      <div class="personalization-form">
+        <div class="form-group">
+          <label for="box-gift-note">Custom Gift Note / Corporate Message</label>
+          <textarea id="box-gift-note" placeholder="Write the message you'd like printed or hand-written on the greeting card..."></textarea>
+          <small>Optional: Leave blank if you don't require custom messaging.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="box-logo-file">Upload Corporate Logo (Optional)</label>
+          <input type="file" id="box-logo-file" accept="image/*,.pdf,.eps,.ai,.svg">
+          <small>For custom laser-engraved or branded boxes, upload high-res PNG, SVG, or PDF.</small>
+        </div>
+
+        <div id="bundle-review-summary" style="background: #f8fafc; padding: 1rem; border-radius: 6px; margin-top: 1.5rem; font-size: 0.9rem;">
+          <strong>Box Configuration Summary:</strong>
+          <div id="summary-packaging-name" style="margin-top: 0.5rem; color: var(--color-accent);">Packaging: None</div>
+          <div id="summary-items-list" style="margin-top: 0.25rem;">Items: 0 selected</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WIZARD CONTROLS FOOTER -->
+    <div class="wizard-footer">
+      <div class="container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <button type="button" class="btn btn-secondary" id="btn-wizard-prev" style="visibility: hidden;">&larr; Back</button>
+        <div class="builder-summary-text" id="builder-footer-summary">1 Box & 0 Items selected</div>
+        <div>
+          <button type="button" class="btn btn-green" id="btn-wizard-next" disabled>Next Step &rarr;</button>
+          <button type="button" class="btn btn-crimson" id="btn-wizard-submit" style="display: none;">Add Box to Basket &rarr;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function() {
+    // State Container
+    const state = {
+      step: 1,
+      packaging: null, // { id, title, price }
+      items: {},       // { [id]: { id, title, price, quantity } }
+      personalization: {
+        note: '',
+        logoFile: null
+      },
+      isSubmitting: false
+    };
+
+    // DOM References
+    const stepPanes = document.querySelectorAll('[data-step-pane]');
+    const stepIndicators = document.querySelectorAll('[data-step-indicator]');
+    const stepInstructions = document.getElementById('builder-step-instructions');
+    const prevBtn = document.getElementById('btn-wizard-prev');
+    const nextBtn = document.getElementById('btn-wizard-next');
+    const submitBtn = document.getElementById('btn-wizard-submit');
+    const footerSummary = document.getElementById('builder-footer-summary');
+    const giftNoteInput = document.getElementById('box-gift-note');
+    const logoFileInput = document.getElementById('box-logo-file');
+    const summaryPackaging = document.getElementById('summary-packaging-name');
+    const summaryItems = document.getElementById('summary-items-list');
+
+    // Step 1: Packaging Selection
+    document.querySelectorAll('.packaging-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.packaging-card').forEach(c => {
+          c.classList.remove('selected');
+          const btn = c.querySelector('.select-packaging-btn');
+          if (btn) btn.textContent = 'Select This Box';
+        });
+
+        card.classList.add('selected');
+        const selectBtn = card.querySelector('.select-packaging-btn');
+        if (selectBtn) selectBtn.textContent = 'Selected ✓';
+
+        state.packaging = {
+          id: card.dataset.id,
+          title: card.dataset.title,
+          price: card.dataset.price
+        };
+
+        updateUI();
+      });
+    });
+
+    // Step 2: Items Multi-Selection with quantity
+    document.querySelectorAll('.item-card').forEach(card => {
+      const id = card.dataset.id;
+      const title = card.dataset.title;
+      const price = card.dataset.price;
+      const plusBtn = card.querySelector('.btn-qty-plus');
+      const minusBtn = card.querySelector('.btn-qty-minus');
+      const qtyDisplay = card.querySelector(`[data-qty-for="${id}"]`);
+
+      plusBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!state.items[id]) {
+          state.items[id] = { id, title, price, quantity: 0 };
+        }
+        state.items[id].quantity += 1;
+        qtyDisplay.textContent = state.items[id].quantity;
+        card.classList.add('selected');
+        updateUI();
+      });
+
+      minusBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (state.items[id] && state.items[id].quantity > 0) {
+          state.items[id].quantity -= 1;
+          qtyDisplay.textContent = state.items[id].quantity;
+          if (state.items[id].quantity === 0) {
+            delete state.items[id];
+            card.classList.remove('selected');
+          }
+          updateUI();
+        }
+      });
+    });
+
+    // Step 3: Personalization Inputs
+    giftNoteInput.addEventListener('input', (e) => {
+      state.personalization.note = e.target.value.trim();
+    });
+
+    logoFileInput.addEventListener('change', (e) => {
+      state.personalization.logoFile = e.target.files[0] || null;
+    });
+
+    // Navigation Controls
+    nextBtn.addEventListener('click', () => {
+      if (state.step === 1 && state.packaging) {
+        state.step = 2;
+      } else if (state.step === 2 && getTotalItemCount() > 0) {
+        state.step = 3;
+      }
+      renderStep();
+    });
+
+    prevBtn.addEventListener('click', () => {
+      if (state.step > 1) {
+        state.step -= 1;
+        renderStep();
+      }
+    });
+
+    submitBtn.addEventListener('click', async () => {
+      if (state.isSubmitting) return;
+      state.isSubmitting = true;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Adding to Basket...';
+
+      try {
+        await addCustomBoxToCart(state);
+        window.location.href = '/cart';
+      } catch (err) {
+        console.error('Custom box add failed:', err);
+        alert('Could not add custom box to quote:\n' + err.message);
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Add Box to Basket →';
+        state.isSubmitting = false;
+      }
+    });
+
+    function getTotalItemCount() {
+      return Object.values(state.items).reduce((sum, item) => sum + item.quantity, 0);
+    }
+
+    function updateUI() {
+      const itemCount = getTotalItemCount();
+
+      // Update validation states for Next button
+      if (state.step === 1) {
+        nextBtn.disabled = !state.packaging;
+      } else if (state.step === 2) {
+        nextBtn.disabled = itemCount === 0;
+      }
+
+      // Summary text
+      const packName = state.packaging ? state.packaging.title : 'No box';
+      footerSummary.textContent = `${packName} + ${itemCount} items selected`;
+
+      // Step 3 summary review
+      if (summaryPackaging) {
+        summaryPackaging.textContent = `Packaging: ${packName}`;
+      }
+      if (summaryItems) {
+        const itemNames = Object.values(state.items)
+          .map(i => `${i.quantity}x ${i.title}`)
+          .join(', ');
+        summaryItems.textContent = itemCount > 0 ? `Items: ${itemNames}` : 'Items: 0 selected';
+      }
+    }
+
+    function renderStep() {
+      // Step indicator bar
+      stepIndicators.forEach(ind => {
+        const stepNum = parseInt(ind.dataset.stepIndicator, 10);
+        ind.classList.remove('active', 'completed');
+        if (stepNum === state.step) {
+          ind.classList.add('active');
+        } else if (stepNum < state.step) {
+          ind.classList.add('completed');
+        }
+      });
+
+      // Show/Hide Panes
+      stepPanes.forEach(pane => {
+        pane.classList.toggle('active', parseInt(pane.dataset.stepPane, 10) === state.step);
+      });
+
+      // Navigation button visibility
+      prevBtn.style.visibility = state.step > 1 ? 'visible' : 'hidden';
+
+      if (state.step === 3) {
+        nextBtn.style.display = 'none';
+        submitBtn.style.display = 'inline-flex';
+        stepInstructions.textContent = 'Step 3: Add your gift note and corporate branding.';
+      } else {
+        nextBtn.style.display = 'inline-flex';
+        submitBtn.style.display = 'none';
+        stepInstructions.textContent = state.step === 1 
+          ? 'Step 1: Choose your box or crate style.' 
+          : 'Step 2: Pick goodies and products to place inside the box.';
+      }
+
+      updateUI();
+    }
+
+    // Cart API Dispatcher: uses clean JSON when no file is uploaded (most reliable in Shopify)
+    async function addCustomBoxToCart(currentState) {
+      const bundleId = `bundle_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+
+      if (currentState.personalization.logoFile) {
+        // Binary File Upload mode via FormData
+        const formData = new FormData();
+        let index = 0;
+
+        formData.append(`items[${index}][id]`, currentState.packaging.id);
+        formData.append(`items[${index}][quantity]`, 1);
+        formData.append(`items[${index}][properties][_bundleId]`, bundleId);
+        formData.append(`items[${index}][properties][_bundleRole]`, 'packaging');
+        formData.append(`items[${index}][properties][Box Type]`, currentState.packaging.title);
+
+        if (currentState.personalization.note) {
+          formData.append(`items[${index}][properties][Custom Note]`, currentState.personalization.note);
+        }
+        formData.append(`items[${index}][properties][Logo]`, currentState.personalization.logoFile);
+        index++;
+
+        Object.values(currentState.items).forEach(item => {
+          formData.append(`items[${index}][id]`, item.id);
+          formData.append(`items[${index}][quantity]`, item.quantity);
+          formData.append(`items[${index}][properties][_bundleId]`, bundleId);
+          formData.append(`items[${index}][properties][_bundleRole]`, 'item');
+          formData.append(`items[${index}][properties][Part of]`, currentState.packaging.title);
+          index++;
+        });
+
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) {
+          let errText = '';
+          try {
+            const errJson = await response.json();
+            errText = errJson.description || errJson.message || JSON.stringify(errJson);
+          } catch(e) {
+            errText = await response.text();
+          }
+          throw new Error(errText || `Shopify error ${response.status}`);
+        }
+        return await response.json();
+      } else {
+        // Standard Structured JSON mode (Direct & 100% compliant with Shopify AJAX Cart API)
+        const packProps = {
+          '_bundleId': bundleId,
+          '_bundleRole': 'packaging',
+          'Box Type': currentState.packaging.title
+        };
+        if (currentState.personalization.note) {
+          packProps['Custom Note'] = currentState.personalization.note;
+        }
+
+        const itemsList = [
+          {
+            id: parseInt(currentState.packaging.id, 10),
+            quantity: 1,
+            properties: packProps
+          },
+          ...Object.values(currentState.items).map(item => ({
+            id: parseInt(item.id, 10),
+            quantity: parseInt(item.quantity, 10),
+            properties: {
+              '_bundleId': bundleId,
+              '_bundleRole': 'item',
+              'Part of': currentState.packaging.title
+            }
+          }))
+        ];
+
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({ items: itemsList })
+        });
+
+        if (!response.ok) {
+          let errText = '';
+          try {
+            const errJson = await response.json();
+            errText = errJson.description || errJson.message || JSON.stringify(errJson);
+          } catch(e) {
+            errText = await response.text();
+          }
+          throw new Error(errText || `Shopify error ${response.status}`);
+        }
+        return await response.json();
+      }
+    }
+
+    // Initial render
+    renderStep();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Custom Box Builder",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Build Your Custom Gift Box"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Box Builder"
+    }
+  ]
+}
+{% endschema %}
+

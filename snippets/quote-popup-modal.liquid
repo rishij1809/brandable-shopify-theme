@@ -1,0 +1,201 @@
+{% comment %}
+  Brandable Quote Capture Popup Modal
+  Triggered when customer clicks "Request Quote", "Buy Now", or "Proceed to Quote" in the Cart.
+  Captures: Name, Company, Email, Phone, MOQ (Quantity), Delivery Date, and notes.
+  Ingests active cart items or single product.
+{% endcomment %}
+
+<div id="quote-modal" class="quote-modal-backdrop" aria-hidden="true" style="display: none;">
+  <div class="quote-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button type="button" class="quote-modal-close" id="close-quote-modal" aria-label="Close modal">&times;</button>
+    
+    <div class="quote-modal-header">
+      <span class="modal-badge">B2B Corporate Gifting</span>
+      <h2 id="modal-title" style="margin: 0.5rem 0 0.25rem; font-size: 1.5rem; color: #111;">Request a Corporate Quote</h2>
+      <p style="margin: 0; color: #666; font-size: 0.9rem;">
+        No payment required today. Submit your inquiry and our gifting concierge will prepare tiered volume pricing and digital mockups.
+      </p>
+    </div>
+
+    <div class="quote-modal-body">
+      <!-- Active items preview inside modal -->
+      <div id="modal-items-summary" class="modal-summary-box">
+        <strong>Selected Items for Quote:</strong>
+        <div id="modal-summary-content" style="font-size: 0.85rem; color: #444; margin-top: 0.25rem;">
+          Loading quote basket...
+        </div>
+      </div>
+
+      {% form 'contact', id: 'modal-quote-form' %}
+        {% if form.posted_successfully? %}
+          <div class="notice-success">
+            <strong>Inquiry Received!</strong><br>
+            Thank you for reaching out. A corporate gifting specialist will contact you within 24 business hours with custom pricing.
+          </div>
+          <script>
+            // Clear cart upon successful submission
+            fetch('/cart/clear.js', { method: 'POST' }).then(() => {
+              const el = document.getElementById('cart-item-count');
+              if (el) el.textContent = '(0)';
+            });
+          </script>
+        {% endif %}
+
+        {% if form.errors %}
+          <div class="notice-error">
+            {{ form.errors | default_errors }}
+          </div>
+        {% endif %}
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="ModalContactName">Contact Name *</label>
+            <input type="text" id="ModalContactName" name="contact[name]" placeholder="e.g. Sarah Jenkins" required>
+          </div>
+          <div class="form-group">
+            <label for="ModalCompanyName">Company Name *</label>
+            <input type="text" id="ModalCompanyName" name="contact[Company]" placeholder="e.g. Salesforce" required>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="ModalEmail">Business Email *</label>
+            <input type="email" id="ModalEmail" name="contact[email]" placeholder="sarah@salesforce.com" required>
+          </div>
+          <div class="form-group">
+            <label for="ModalPhone">Phone Number *</label>
+            <input type="tel" id="ModalPhone" name="contact[phone]" placeholder="+1 (555) 019-2834" required>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="ModalQuantity">Estimated Quantity (MOQ) *</label>
+            <input type="number" id="ModalQuantity" name="contact[Expected Quantity]" placeholder="e.g. 50 boxes" min="1" required>
+          </div>
+          <div class="form-group">
+            <label for="ModalDeliveryDate">Target Delivery Date *</label>
+            <input type="date" id="ModalDeliveryDate" name="contact[Target Delivery Date]" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="ModalNotes">Custom Branding / Special Notes</label>
+          <textarea id="ModalNotes" name="contact[Notes]" placeholder="Tell us about custom logo engraving, dietary preferences, or specific box colors..."></textarea>
+        </div>
+
+        <!-- Ingested cart & item body payload -->
+        <textarea id="ModalPayloadBody" name="contact[body]" style="display: none;"></textarea>
+
+        <button type="submit" id="btn-submit-modal-quote" class="btn btn-crimson" style="width: 100%; padding: 1rem; font-size: 1rem;">
+          Submit Quote Inquiry &rarr;
+        </button>
+      {% endform %}
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const modal = document.getElementById('quote-modal');
+    const closeBtn = document.getElementById('close-quote-modal');
+    const form = document.getElementById('modal-quote-form');
+    const summaryEl = document.getElementById('modal-summary-content');
+    const payloadTextarea = document.getElementById('ModalPayloadBody');
+
+    // Global opener function
+    window.openQuoteModal = async function(singleProductInfo = null) {
+      modal.style.display = 'flex';
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+
+      if (singleProductInfo) {
+        // Direct inquiry for single product
+        summaryEl.innerHTML = `<div><strong>${singleProductInfo.title}</strong> (Quantity: ${singleProductInfo.quantity || 1}) - ${singleProductInfo.price || ''}</div>`;
+        form.dataset.singleProduct = JSON.stringify(singleProductInfo);
+      } else {
+        // Inquiry for entire cart
+        form.dataset.singleProduct = '';
+        try {
+          const res = await fetch('/cart.js');
+          const cart = await res.json();
+          if (cart.items.length === 0) {
+            summaryEl.innerHTML = '<em>Your quote basket is currently empty. You can still submit an inquiry below!</em>';
+          } else {
+            let html = '<ul style="margin: 0; padding-left: 1.2rem;">';
+            cart.items.forEach(item => {
+              html += `<li><strong>${item.quantity}x</strong> ${item.title}</li>`;
+            });
+            html += '</ul>';
+            summaryEl.innerHTML = html;
+          }
+        } catch (e) {
+          summaryEl.textContent = 'Active Basket Items';
+        }
+      }
+    };
+
+    window.closeQuoteModal = function() {
+      modal.style.display = 'none';
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    };
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', window.closeQuoteModal);
+    }
+
+    if (modal) {
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) window.closeQuoteModal();
+      });
+    }
+
+    // Modal Form Ingestion
+    if (form) {
+      form.addEventListener('submit', async function(e) {
+        const company = document.getElementById('ModalCompanyName')?.value || '';
+        const qty = document.getElementById('ModalQuantity')?.value || '';
+        const date = document.getElementById('ModalDeliveryDate')?.value || '';
+        const notes = document.getElementById('ModalNotes')?.value || '';
+
+        let payload = `=== BRANDABLE CORPORATE LEAD INQUIRY ===\n`;
+        payload += `Company: ${company}\n`;
+        payload += `Estimated MOQ: ${qty}\n`;
+        payload += `Target Delivery Date: ${date}\n`;
+        payload += `Custom Branding / Notes: ${notes}\n\n`;
+
+        if (form.dataset.singleProduct) {
+          payload += `--- DIRECT PRODUCT INQUIRY ---\n${form.dataset.singleProduct}\n`;
+        } else {
+          try {
+            const res = await fetch('/cart.js');
+            const cart = await res.json();
+            payload += `--- ACTIVE QUOTE CART BREAKDOWN ---\n`;
+            payload += `Total Items: ${cart.item_count}\n`;
+            cart.items.forEach((it, idx) => {
+              payload += `${idx + 1}. ${it.quantity}x ${it.title}\n`;
+              if (it.properties) {
+                for (const [k, v] of Object.entries(it.properties)) {
+                  payload += `   • ${k}: ${v}\n`;
+                }
+              }
+            });
+            payload += `\n--- RAW CART JSON ---\n` + JSON.stringify(cart, null, 2);
+          } catch(err) {
+            payload += `Could not fetch cart JSON: ${err.message}\n`;
+          }
+        }
+
+        payloadTextarea.value = payload;
+      });
+    }
+
+    // Auto-open if redirected back with success/errors
+    {% if form.posted_successfully? or form.errors %}
+      window.openQuoteModal();
+    {% endif %}
+  })();
+</script>
+

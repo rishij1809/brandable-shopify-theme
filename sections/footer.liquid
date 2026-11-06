@@ -1,0 +1,68 @@
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <a href="/" class="site-logo" style="margin-bottom: 1.25rem; display: inline-block;">
+          <img src="{{ 'brandable-logo.png' | asset_url }}" 
+               alt="{{ shop.name | default: 'Brandable' }}" 
+               class="site-logo-img" 
+               width="140" 
+               height="34">
+        </a>
+        <p style="font-size: 0.9rem; line-height: 1.7; color: #9ca3af; max-width: 340px;">
+          Brandable delivers bespoke corporate gifting, custom curated gift boxes, and executive hampers for companies worldwide. Zero upfront payment, custom logo branding, and white-glove drop shipping.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Catalog & Boxes</h4>
+        <ul>
+          <li><a href="/#box-builder">Custom Box Builder</a></li>
+          <li><a href="/collections/all">Executive Hampers</a></li>
+          <li><a href="/collections/all">Employee Onboarding Kits</a></li>
+          <li><a href="/collections/all">Holiday Gift Baskets</a></li>
+          <li><a href="/collections/all">Artisan Gourmet Crates</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Corporate Services</h4>
+        <ul>
+          <li><a href="/#how-it-works">How Gifting Works</a></li>
+          <li><a href="javascript:void(0)" onclick="openQuoteModal()">Request Custom Quote</a></li>
+          <li><a href="javascript:void(0)" onclick="openQuoteModal()">Bulk & Tiered Pricing</a></li>
+          <li><a href="javascript:void(0)" onclick="openQuoteModal()">Multi-Address Shipping</a></li>
+          <li><a href="/cart">View Quote Basket</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Corporate Concierge</h4>
+        <p style="font-size: 0.875rem; color: #9ca3af; margin-bottom: 0.75rem;">
+          Have questions or an urgent holiday gifting deadline?
+        </p>
+        <p style="font-size: 0.9rem; color: #fff; margin: 0 0 0.5rem 0;">
+          <strong>Email:</strong> concierge@brandable.example.com
+        </p>
+        <p style="font-size: 0.9rem; color: #fff; margin: 0 0 1.25rem 0;">
+          <strong>Phone:</strong> +1 (800) 555-GIFT
+        </p>
+        <button type="button" class="btn btn-green" style="padding: 0.6rem 1rem; font-size: 0.8rem;" onclick="openQuoteModal()">
+          Talk to Gifting Specialist
+        </button>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name | default: 'Brandable' }}. All rights reserved. B2B Corporate Gifting & Lead-Generation Platform.</p>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": []
+}
+{% endschema %}
+

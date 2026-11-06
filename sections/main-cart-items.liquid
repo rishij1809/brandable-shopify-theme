@@ -1,0 +1,162 @@
+{% comment %}
+  Brandable Main Cart Items Section
+  Groups bundled gift boxes by _bundleId and renders standalone quote items
+{% endcomment %}
+
+<div class="container" style="padding: 2rem 1.5rem 0;">
+  <h1>{{ 'general.cart' | t | default: 'Your Quote Basket' }}</h1>
+
+  {% if cart.item_count == 0 %}
+    <div style="text-align: center; padding: 4rem 1rem; background: #fff; border-radius: var(--radius); border: 1px solid var(--color-border); margin-top: 1.5rem;">
+      <p style="font-size: 1.15rem; color: var(--color-text-muted);">{{ 'general.empty_cart' | t | default: 'Your quote basket is currently empty.' }}</p>
+      <a href="/#box-builder" class="btn btn-crimson" style="margin-top: 1rem;">Build a Custom Box</a>
+      <a href="/collections/all" class="btn btn-secondary" style="margin-top: 1rem; margin-left: 0.5rem;">Browse Hampers</a>
+    </div>
+  {% else %}
+    <div id="quote-cart-items" style="margin-top: 1.5rem;">
+      {% for item in cart.items %}
+        {% assign role = item.properties['_bundleRole'] %}
+        {% assign bundle_id = item.properties['_bundleId'] %}
+
+        {% if role == 'packaging' %}
+          {% comment %} Render Parent Packaging Container {% endcomment %}
+          <div class="bundle-box-card" data-bundle-id="{{ bundle_id }}">
+            <div class="bundle-box-header">
+              <div style="display: flex; gap: 1rem; align-items: center;">
+                {% if item.image %}
+                  <img src="{{ item.image | image_url: width: 100 }}" 
+                       alt="{{ item.title | escape }}" 
+                       style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px; border: 1px solid var(--color-border);">
+                {% endif %}
+                <div>
+                  <h3 class="bundle-box-title">Custom Gift Box: {{ item.product.title }}</h3>
+                  <div class="bundle-properties-meta">
+                    {% for p in item.properties %}
+                      {% assign first_char = p.first | slice: 0 %}
+                      {% unless first_char == '_' or p.last == blank %}
+                        <div>
+                          <strong>{{ p.first }}:</strong> 
+                          {% if p.last contains '/s/files/' or p.last contains 'cdn.shopify.com' %}
+                            <a href="{{ p.last }}" target="_blank" rel="noopener">View Uploaded Logo File</a>
+                          {% else %}
+                            {{ p.last }}
+                          {% endif %}
+                        </div>
+                      {% endunless %}
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+
+              <div style="text-align: right;">
+                <button type="button" 
+                        class="btn btn-secondary remove-bundle-btn" 
+                        data-bundle-id="{{ bundle_id }}"
+                        style="padding: 0.4rem 0.8rem; font-size: 0.85rem; color: #ef4444; border-color: #fecaca;">
+                  Remove Box
+                </button>
+              </div>
+            </div>
+
+            <!-- Nested Child Items in this Bundle -->
+            <ul class="bundle-items-list">
+              <li style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); margin-bottom: 0.5rem;">
+                Included Goodies:
+              </li>
+              {% for child in cart.items %}
+                {% if child.properties['_bundleId'] == bundle_id and child.properties['_bundleRole'] == 'item' %}
+                  <li class="bundle-item-row" data-line-key="{{ child.key }}">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                      {% if child.image %}
+                        <img src="{{ child.image | image_url: width: 60 }}" 
+                             alt="{{ child.title | escape }}" 
+                             style="width: 36px; height: 36px; object-fit: cover; border-radius: 4px;">
+                      {% endif %}
+                      <span><strong>{{ child.quantity }}x</strong> {{ child.product.title }}</span>
+                    </div>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+
+        {% elsif role == 'item' %}
+          {% comment %} Child items are rendered inside their parent packaging card above {% endcomment %}
+          {% continue %}
+
+        {% else %}
+          {% comment %} Standalone Catalog Product {% endcomment %}
+          <div class="standalone-cart-item" data-line-key="{{ item.key }}">
+            <div style="display: flex; gap: 1rem; align-items: center;">
+              {% if item.image %}
+                <img src="{{ item.image | image_url: width: 100 }}" 
+                     alt="{{ item.title | escape }}" 
+                     style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px; border: 1px solid var(--color-border);">
+              {% endif %}
+              <div>
+                <h4 style="margin: 0 0 0.25rem 0; font-size: 1rem;">{{ item.product.title }}</h4>
+                <div style="color: var(--color-text-muted); font-size: 0.85rem;">Standalone Hamper / Item</div>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 1.5rem;">
+              <div>Quantity: <strong>{{ item.quantity }}</strong></div>
+              <a href="/cart/change?line={{ forloop.index }}&quantity=0" 
+                 class="btn btn-secondary" 
+                 style="padding: 0.4rem 0.8rem; font-size: 0.85rem; color: #ef4444; border-color: #fecaca;">
+                Remove
+              </a>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+
+<script>
+  // Bundle Deletion Handler
+  document.querySelectorAll('.remove-bundle-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const bundleId = btn.dataset.bundleId;
+      if (!bundleId) return;
+
+      btn.disabled = true;
+      btn.textContent = 'Removing...';
+
+      try {
+        const cartRes = await fetch('/cart.js');
+        const cartData = await cartRes.json();
+        
+        // Find all line items sharing this _bundleId
+        const updates = {};
+        cartData.items.forEach(item => {
+          if (item.properties && item.properties['_bundleId'] === bundleId) {
+            updates[item.key] = 0;
+          }
+        });
+
+        await fetch('/cart/update.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ updates })
+        });
+
+        window.location.reload();
+      } catch (err) {
+        console.error('Failed to remove bundle:', err);
+        alert('Could not remove custom box. Please refresh and try again.');
+        btn.disabled = false;
+        btn.textContent = 'Remove Box';
+      }
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Cart Items",
+  "settings": []
+}
+{% endschema %}
+

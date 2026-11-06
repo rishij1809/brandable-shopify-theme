@@ -1,0 +1,16 @@
+{
+  "general": {
+    "quote": "Request a Quote",
+    "submit_quote": "Submit Quote Request",
+    "cart": "Quote Basket",
+    "empty_cart": "Your quote basket is currently empty.",
+    "continue_browsing": "Browse Catalog"
+  },
+  "box_builder": {
+    "step_1": "1. Select Packaging",
+    "step_2": "2. Choose Items",
+    "step_3": "3. Personalize",
+    "add_to_quote": "Add Custom Box to Quote"
+  }
+}
+

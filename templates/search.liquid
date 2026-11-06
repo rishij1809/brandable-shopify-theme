@@ -1,0 +1,24 @@
+<div class="container" style="padding: 3rem 1.5rem;">
+  <h1>Search Results</h1>
+  {% if search.performed %}
+    <p style="color: var(--color-text-muted);">{{ search.results_count }} results found for "{{ search.terms }}".</p>
+    <div class="product-grid" style="margin-top: 2rem;">
+      {% for item in search.results %}
+        {% if item.object_type == 'product' %}
+          <div class="product-card">
+            <a href="{{ item.url }}" style="text-decoration: none; color: inherit;">
+              {% if item.featured_image %}
+                <img src="{{ item.featured_image | image_url: width: 400 }}" alt="{{ item.title | escape }}">
+              {% endif %}
+              <h3 class="card-title">{{ item.title }}</h3>
+              <div class="card-price">{{ item.price | money }}</div>
+            </a>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <p style="color: var(--color-text-muted);">Use the search bar to find products and hampers.</p>
+  {% endif %}
+</div>
+

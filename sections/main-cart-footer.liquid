@@ -1,0 +1,232 @@
+{% comment %}
+  Brandable Main Cart Footer Section
+  Replaces checkout button with Lead Capture Form for Quote Requests
+{% endcomment %}
+
+<div class="container" style="padding: 1.5rem 1.5rem 4rem;">
+  {% if cart.item_count > 0 or form.posted_successfully? %}
+    <div class="cart-quote-layout">
+      <!-- Left Column: Guidelines / Notes -->
+      <div>
+        <div style="background: #ffffff; padding: 1.75rem; border-radius: var(--radius); border: 1px solid var(--color-border);">
+          <h3 style="margin-top: 0;">How Quote Requests Work</h3>
+          <ul style="padding-left: 1.25rem; color: var(--color-text-muted); line-height: 1.7;">
+            <li><strong>No upfront payment:</strong> We prepare personalized tiered pricing based on your required volume.</li>
+            <li><strong>Branding Review:</strong> If you attached a logo or custom notes, our design team prepares a 3D digital mockup for approval.</li>
+            <li><strong>Fast Turnaround:</strong> You will receive a formalized quote PDF via email within 1 business day.</li>
+          </ul>
+          <div style="margin-top: 1.5rem; font-size: 0.85rem; color: var(--color-text-muted);">
+            Need urgent assistance? Contact corporate concierge directly at <strong>gifting@brandable.example.com</strong>.
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Lead Capture Form & Modal Trigger -->
+      <div class="quote-capture-panel">
+        <h2>Submit Quote Request</h2>
+        <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+          Provide your project details below or click to open our quick quote form.
+        </p>
+
+        <button type="button" class="btn btn-crimson" style="width: 100%; padding: 1rem; margin-bottom: 1.5rem;" onclick="openQuoteModal()">
+          Open Quick Quote Popup &rarr;
+        </button>
+
+        <div style="text-align: center; margin: 1rem 0; color: #999; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">
+          <span>— or fill details below —</span>
+        </div>
+
+        {% form 'contact', id: 'quote-request-form' %}
+          {% if form.posted_successfully? %}
+            <div class="notice-success">
+              <strong>Quote Request Submitted!</strong><br>
+              Thank you for your inquiry. Your custom gift configuration has been delivered to our corporate concierge team. We will review your specification and reach out shortly.
+            </div>
+            <script>
+              // Reset cart after quote submission
+              fetch('/cart/clear.js', { method: 'POST' }).then(() => {
+                const countEl = document.getElementById('cart-item-count');
+                if (countEl) countEl.textContent = '(0)';
+              });
+            </script>
+          {% endif %}
+
+          {% if form.errors %}
+            <div class="notice-error">
+              <strong>Please review the following errors:</strong>
+              {{ form.errors | default_errors }}
+            </div>
+          {% endif %}
+
+          <div class="form-group">
+            <label for="QuoteContactName">Contact Name *</label>
+            <input type="text" 
+                   id="QuoteContactName" 
+                   name="contact[name]" 
+                   placeholder="e.g. Jane Doe" 
+                   required 
+                   value="{% if form.name %}{{ form.name }}{% endif %}">
+          </div>
+
+          <div class="form-group">
+            <label for="QuoteCompanyName">Company Name *</label>
+            <input type="text" 
+                   id="QuoteCompanyName" 
+                   name="contact[Company]" 
+                   placeholder="e.g. Acme Corporation" 
+                   required>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="QuoteEmail">Business Email *</label>
+              <input type="email" 
+                     id="QuoteEmail" 
+                     name="contact[email]" 
+                     placeholder="jane@acme.com" 
+                     required 
+                     value="{% if form.email %}{{ form.email }}{% endif %}">
+            </div>
+
+            <div class="form-group">
+              <label for="QuotePhone">Phone Number *</label>
+              <input type="tel" 
+                     id="QuotePhone" 
+                     name="contact[phone]" 
+                     placeholder="+1 (555) 000-0000" 
+                     required>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="QuoteMOQ">Expected Quantity (MOQ) *</label>
+              <input type="number" 
+                     id="QuoteMOQ" 
+                     name="contact[Expected Quantity]" 
+                     placeholder="e.g. 50" 
+                     min="1" 
+                     required>
+            </div>
+
+            <div class="form-group">
+              <label for="QuoteDeliveryDate">Target Delivery Date *</label>
+              <input type="date" 
+                     id="QuoteDeliveryDate" 
+                     name="contact[Target Delivery Date]" 
+                     required>
+            </div>
+          </div>
+
+          <!-- Ingested Cart Body (Hidden, populated by JS before submit) -->
+          <textarea id="QuoteCartPayload" name="contact[body]" style="display: none;"></textarea>
+
+          <button type="submit" id="btn-submit-quote" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 1rem;">
+            Submit Quote Request
+          </button>
+        {% endform %}
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+<!-- Embedded Cart JSON for ingestion -->
+<script id="raw-cart-json" type="application/json">
+  {{ cart | json }}
+</script>
+
+<script>
+  (function() {
+    const quoteForm = document.getElementById('quote-request-form');
+    const payloadTextarea = document.getElementById('QuoteCartPayload');
+    const rawCartScript = document.getElementById('raw-cart-json');
+
+    if (!quoteForm || !payloadTextarea || !rawCartScript) return;
+
+    quoteForm.addEventListener('submit', function(e) {
+      try {
+        const cartData = JSON.parse(rawCartScript.textContent || '{}');
+        const company = document.getElementById('QuoteCompanyName')?.value || '';
+        const moq = document.getElementById('QuoteMOQ')?.value || '';
+        const deliveryDate = document.getElementById('QuoteDeliveryDate')?.value || '';
+
+        // Synthesize human-readable cart summary
+        let summaryText = `=== BRANDABLE B2B QUOTE REQUEST ===\n`;
+        summaryText += `Company: ${company}\n`;
+        summaryText += `Expected Quantity (MOQ): ${moq}\n`;
+        summaryText += `Target Delivery Date: ${deliveryDate}\n`;
+        summaryText += `Total Basket Line Items: ${cartData.item_count || 0}\n\n`;
+        summaryText += `--- ITEMIZED SPECIFICATION ---\n`;
+
+        if (cartData.items && cartData.items.length > 0) {
+          // Group bundles
+          const bundles = {};
+          const standalones = [];
+
+          cartData.items.forEach(item => {
+            const props = item.properties || {};
+            const bundleId = props['_bundleId'];
+            const role = props['_bundleRole'];
+
+            if (bundleId) {
+              if (!bundles[bundleId]) {
+                bundles[bundleId] = { packaging: null, items: [] };
+              }
+              if (role === 'packaging') {
+                bundles[bundleId].packaging = item;
+              } else {
+                bundles[bundleId].items.push(item);
+              }
+            } else {
+              standalones.push(item);
+            }
+          });
+
+          // Print bundles
+          Object.keys(bundles).forEach((bId, idx) => {
+            const b = bundles[bId];
+            const packTitle = b.packaging ? b.packaging.title : 'Custom Box';
+            summaryText += `\n[CUSTOM BOX #${idx + 1}]: ${packTitle} (Qty: ${b.packaging ? b.packaging.quantity : 1})\n`;
+            
+            if (b.packaging && b.packaging.properties) {
+              for (const [k, v] of Object.entries(b.packaging.properties)) {
+                if (!k.startsWith('_')) {
+                  summaryText += `  • ${k}: ${v}\n`;
+                }
+              }
+            }
+
+            summaryText += `  Included Items:\n`;
+            b.items.forEach(child => {
+              summaryText += `    - ${child.quantity}x ${child.title}\n`;
+            });
+          });
+
+          // Print standalones
+          if (standalones.length > 0) {
+            summaryText += `\n[STANDALONE ITEMS]:\n`;
+            standalones.forEach(s => {
+              summaryText += `  • ${s.quantity}x ${s.title}\n`;
+            });
+          }
+        }
+
+        // Attach raw machine-readable JSON representation
+        summaryText += `\n\n--- MACHINE PARSABLE CART JSON ---\n`;
+        summaryText += JSON.stringify(cartData, null, 2);
+
+        payloadTextarea.value = summaryText;
+      } catch (err) {
+        console.error('Error compiling quote cart payload:', err);
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Cart Footer",
+  "settings": []
+}
+{% endschema %}
+

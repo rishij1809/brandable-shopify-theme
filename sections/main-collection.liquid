@@ -1,0 +1,55 @@
+{% comment %}
+  Brandable Main Collection Template
+  Displays standalone hampers and items tagged 'custom:standalone'
+{% endcomment %}
+
+<div class="container" style="padding: 3rem 1.5rem;">
+  <div style="margin-bottom: 2rem;">
+    <h1>{{ collection.title | default: 'Corporate Hampers & Catalog' }}</h1>
+    {% if collection.description != blank %}
+      <div style="color: var(--color-text-muted);">{{ collection.description }}</div>
+    {% endif %}
+  </div>
+
+  <div class="product-grid">
+    {% for product in collection.products %}
+      <div class="product-card" style="cursor: default;">
+        <a href="{{ product.url }}" style="text-decoration: none; color: inherit;">
+          <img src="{{ product.featured_image | image_url: width: 400 }}" 
+               alt="{{ product.title | escape }}" 
+               loading="lazy" 
+               width="400" 
+               height="400">
+          <h3 class="card-title">{{ product.title }}</h3>
+          <div class="card-price">{{ product.price | money }}</div>
+        </a>
+
+        <div class="product-card-actions">
+          <form action="/cart/add" method="post" style="flex: 1;">
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+            <input type="hidden" name="quantity" value="1">
+            <button type="submit" class="btn btn-secondary" style="width: 100%; padding: 0.6rem 0.4rem; font-size: 0.78rem;">
+              + Add to Basket
+            </button>
+          </form>
+          <button type="button" 
+                  class="btn btn-crimson" 
+                  style="flex: 1.2; padding: 0.6rem 0.4rem; font-size: 0.78rem;" 
+                  onclick="openQuoteModal({ title: {{ product.title | json }}, price: {{ product.price | money | json }} })">
+            Request Quote
+          </button>
+        </div>
+      </div>
+    {% else %}
+      <p class="text-muted" style="grid-column: 1/-1;">No products found in this collection.</p>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection Products",
+  "settings": []
+}
+{% endschema %}
+

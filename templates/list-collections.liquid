@@ -1,0 +1,17 @@
+<div class="container" style="padding: 3rem 1.5rem;">
+  <h1>All Collections</h1>
+  <div class="product-grid" style="margin-top: 2rem;">
+    {% for collection in collections %}
+      <div class="product-card">
+        <a href="{{ collection.url }}" style="text-decoration: none; color: inherit;">
+          {% if collection.featured_image %}
+            <img src="{{ collection.featured_image | image_url: width: 400 }}" alt="{{ collection.title | escape }}">
+          {% endif %}
+          <h3 class="card-title">{{ collection.title }}</h3>
+          <p style="color: var(--color-text-muted); font-size: 0.9rem;">{{ collection.all_products_count }} products</p>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+

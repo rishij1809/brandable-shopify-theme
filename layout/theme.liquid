@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{ page_title | default: shop.name }} &bull; Bespoke Corporate Gifting</title>
+    <meta name="description" content="{{ page_description | default: 'Bespoke corporate gifting and custom curated gift boxes. Request a quote with custom branding and zero payment upfront.' | escape }}">
+
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+    {{ content_for_header }}
+
+    <script>
+      // Strict Checkout Bypass: Redirect any accidental /checkout attempts to /cart
+      if (window.location.pathname.startsWith('/checkout')) {
+        window.location.replace('/cart');
+      }
+    </script>
+  </head>
+  <body>
+    {% section 'announcement-bar' %}
+    {% section 'header' %}
+
+    <main id="MainContent" role="main">
+      {{ content_for_layout }}
+    </main>
+
+    {% render 'quote-popup-modal' %}
+    {% section 'footer' %}
+  </body>
+</html>

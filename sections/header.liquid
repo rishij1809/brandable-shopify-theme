@@ -1,0 +1,41 @@
+<header class="site-header">
+  <div class="container">
+    <a href="/" class="site-logo" aria-label="{{ shop.name | default: 'Brandable' }}">
+      <img src="{{ 'brandable-logo.png' | asset_url }}" 
+           alt="{{ shop.name | default: 'Brandable' }}" 
+           class="site-logo-img" 
+           width="140" 
+           height="34">
+    </a>
+
+    <nav class="site-nav">
+      <a href="/" class="{% if request.page_type == 'index' %}active{% endif %}">Home</a>
+      <a href="/#box-builder">Build a Box</a>
+      <a href="/collections/all">Hampers & Catalog</a>
+      <a href="/#how-it-works">How It Works</a>
+    </nav>
+
+    <div class="header-actions">
+      <button type="button" class="btn-header-quote" onclick="openQuoteModal()">
+        <span>Request Quote</span>
+      </button>
+
+      <a href="/cart" class="quote-basket-link" title="View Quote Basket">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        <span id="cart-item-count">({{ cart.item_count }})</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": []
+}
+{% endschema %}
+

@@ -1,16 +1,27 @@
 <div class="announcement-bar">
-  <div class="container">
-    <span>✨ <strong>Corporate Gifting Season:</strong> Free Custom Logo Branding on Orders 25+ Units | Zero Payment Upfront</span>
-    <button type="button" onclick="openQuoteModal()" style="background: none; border: none; color: #ffd166; font-weight: 700; text-decoration: underline; cursor: pointer; margin-left: 0.5rem; font-size: inherit;">
-      Request Instant Quote &rarr;
-    </button>
+  <div class="container announcement-bar-container">
+    <div class="announcement-left">
+      <span class="announcement-badge">IGP B2B Partner</span>
+      <span>🚚 <strong>Pan-India Express Delivery</strong> &bull; Free Custom Logo Branding on 25+ Units &bull; Zero Upfront Payment</span>
+    </div>
+    <div class="announcement-right">
+      <span class="concierge-hotline">📞 Corporate Concierge: <strong>+91 98765 43210</strong></span>
+      <button type="button" class="announcement-quote-link" onclick="openQuoteModal()">
+        Request Instant Quote &rarr;
+      </button>
+    </div>
   </div>
 </div>
 
 {% schema %}
 {
   "name": "Announcement Bar",
-  "settings": []
+  "settings": [],
+  "presets": [
+    {
+      "name": "Announcement Bar"
+    }
+  ]
 }
 {% endschema %}
 

@@ -1,130 +1,195 @@
-<section class="products-section">
+<section class="igp-products-section">
   <div class="container">
-    <div class="section-pill-header" style="margin-bottom: 2.5rem;">
-      <h2>Popular Corporate Hampers & Gifts</h2>
-      <div class="dots-divider">
-        <span></span><span></span><span></span>
-      </div>
+    <div class="igp-section-heading">
+      <h2>Bestselling Corporate Hampers & Gifts</h2>
+      <p>Handpicked corporate collections ready for laser engraving and express dispatch</p>
     </div>
 
-    <div class="product-grid">
+    <div class="igp-products-grid">
       {% assign count = 0 %}
       {% for product in collections.all.products limit: 8 %}
         {% unless product.tags contains 'custom:packaging' or product.tags contains 'custom:box_item' %}
           {% assign count = count | plus: 1 %}
           {% assign variant = product.selected_or_first_available_variant | default: product.variants.first %}
-          <div class="product-card-coral">
-            <div class="product-card-media">
-              <span class="product-badge-pill">Hot 🔥</span>
-              <a href="{{ product.url }}" style="display: block; width: 100%; height: 100%;">
+          
+          <div class="igp-product-card">
+            <!-- Media Container -->
+            <div class="igp-card-media">
+              <span class="igp-badge-curated">Bestseller</span>
+              
+              <button type="button" class="igp-wishlist-icon" aria-label="Save item" onclick="this.classList.toggle('active')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+              </button>
+
+              <a href="{{ product.url }}" class="igp-card-img-link">
                 {% if product.featured_image %}
                   <img src="{{ product.featured_image | image_url: width: 600 }}" 
                        alt="{{ product.title | escape }}" 
                        loading="lazy" 
-                       width="600" 
-                       height="450">
+                       width="300" 
+                       height="300">
                 {% else %}
                   <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=600&q=80" 
                        alt="{{ product.title | escape }}" 
                        loading="lazy" 
-                       width="600" 
-                       height="450">
+                       width="300" 
+                       height="300">
                 {% endif %}
               </a>
+
+              <!-- Iconic IGP Rating Badge -->
+              <div class="igp-rating-badge">
+                <span class="star-icon">★</span> 4.8 <span class="review-count">(124)</span>
+              </div>
             </div>
 
-            <div class="product-card-body">
-              <h3><a href="{{ product.url }}">{{ product.title }}</a></h3>
-              <div class="product-card-subtitle">MOQ: 10 units &bull; Includes Custom Logo Branding</div>
-            </div>
+            <!-- Card Details -->
+            <div class="igp-card-body">
+              <h3 class="igp-card-title">
+                <a href="{{ product.url }}">{{ product.title }}</a>
+              </h3>
 
-            <div class="product-card-footer">
-              <div class="product-card-price">{{ product.price | money }}</div>
-              <button type="button" 
-                      class="btn-pill-quote" 
-                      onclick="openQuoteModal({ title: {{ product.title | json }}, price: {{ product.price | money | json }} })">
-                Request Quote
-              </button>
+              <div class="igp-price-row">
+                <span class="igp-current-price">{{ product.price | money }}</span>
+                <span class="igp-mrp-price">{{ product.price | times: 1.25 | money }}</span>
+                <span class="igp-discount-tag">20% OFF</span>
+              </div>
+
+              <div class="igp-delivery-pill">
+                <span>⚡ Earliest Dispatch: Today</span> &bull; <span>MOQ: 10 units</span>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="igp-card-actions">
+                <form action="/cart/add" method="post" class="igp-add-form">
+                  <input type="hidden" name="id" value="{{ variant.id }}">
+                  <input type="hidden" name="quantity" value="1">
+                  <button type="submit" class="btn-igp-basket-sm">+ Basket</button>
+                </form>
+                <button type="button" 
+                        class="btn-igp-quote-sm" 
+                        onclick="openQuoteModal({ title: {{ product.title | json }}, price: {{ product.price | money | json }} })">
+                  Request Quote
+                </button>
+              </div>
             </div>
           </div>
         {% endunless %}
       {% endfor %}
 
       {% if count == 0 %}
-        <!-- Demo Curated Hampers matching the visual style -->
-        <div class="product-card-coral">
-          <div class="product-card-media">
-            <span class="product-badge-pill">20% Off</span>
-            <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=600&q=80" alt="The Executive Reserve Hamper">
-          </div>
-          <div class="product-card-body">
-            <h3>The Executive Reserve Hamper</h3>
-            <div class="product-card-subtitle">Luxury Wine & Artisan Delights</div>
-          </div>
-          <div class="product-card-footer">
-            <div class="product-card-price">$120.00</div>
-            <button type="button" class="btn-pill-quote" onclick="openQuoteModal({ title: 'The Executive Reserve Hamper', price: '$120.00' })">
-              Request Quote
+        <!-- Demo Curated Hampers matching authentic IGP catalog style -->
+        <div class="igp-product-card">
+          <div class="igp-card-media">
+            <span class="igp-badge-curated">Bestseller</span>
+            <button type="button" class="igp-wishlist-icon" aria-label="Save" onclick="this.classList.toggle('active')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
             </button>
+            <a href="/collections/all" class="igp-card-img-link">
+              <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=600&q=80" alt="The Executive Reserve Hamper">
+            </a>
+            <div class="igp-rating-badge"><span class="star-icon">★</span> 4.9 <span class="review-count">(340)</span></div>
+          </div>
+          <div class="igp-card-body">
+            <h3 class="igp-card-title"><a href="/collections/all">The Executive Reserve Luxury Hamper</a></h3>
+            <div class="igp-price-row">
+              <span class="igp-current-price">₹ 2,499</span>
+              <span class="igp-mrp-price">₹ 3,299</span>
+              <span class="igp-discount-tag">24% OFF</span>
+            </div>
+            <div class="igp-delivery-pill"><span>⚡ Earliest Dispatch: Today</span> &bull; <span>Free Logo Engraving</span></div>
+            <div class="igp-card-actions">
+              <button type="button" class="btn-igp-basket-sm" onclick="openQuoteModal({ title: 'The Executive Reserve Luxury Hamper', price: '₹ 2,499' })">+ Basket</button>
+              <button type="button" class="btn-igp-quote-sm" onclick="openQuoteModal({ title: 'The Executive Reserve Luxury Hamper', price: '₹ 2,499' })">Request Quote</button>
+            </div>
           </div>
         </div>
 
-        <div class="product-card-coral">
-          <div class="product-card-media">
-            <span class="product-badge-pill">New</span>
-            <img src="https://images.unsplash.com/photo-1513297887119-d46091b24bfa?auto=format&fit=crop&w=600&q=80" alt="Artisan Gourmet Treats Crate">
-          </div>
-          <div class="product-card-body">
-            <h3>Artisan Gourmet Treats Crate</h3>
-            <div class="product-card-subtitle">Small-batch treats & specialty coffee</div>
-          </div>
-          <div class="product-card-footer">
-            <div class="product-card-price">$85.00</div>
-            <button type="button" class="btn-pill-quote" onclick="openQuoteModal({ title: 'Artisan Gourmet Treats Crate', price: '$85.00' })">
-              Request Quote
+        <div class="igp-product-card">
+          <div class="igp-card-media">
+            <span class="igp-badge-curated">Popular</span>
+            <button type="button" class="igp-wishlist-icon" aria-label="Save" onclick="this.classList.toggle('active')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
             </button>
+            <a href="/collections/all" class="igp-card-img-link">
+              <img src="https://images.unsplash.com/photo-1513297887119-d46091b24bfa?auto=format&fit=crop&w=600&q=80" alt="Artisan Gourmet Treats Crate">
+            </a>
+            <div class="igp-rating-badge"><span class="star-icon">★</span> 4.8 <span class="review-count">(195)</span></div>
+          </div>
+          <div class="igp-card-body">
+            <h3 class="igp-card-title"><a href="/collections/all">Artisan Gourmet Treats Celebration Crate</a></h3>
+            <div class="igp-price-row">
+              <span class="igp-current-price">₹ 1,799</span>
+              <span class="igp-mrp-price">₹ 2,299</span>
+              <span class="igp-discount-tag">21% OFF</span>
+            </div>
+            <div class="igp-delivery-pill"><span>⚡ Earliest Dispatch: Today</span> &bull; <span>Belgian Chocolates</span></div>
+            <div class="igp-card-actions">
+              <button type="button" class="btn-igp-basket-sm" onclick="openQuoteModal({ title: 'Artisan Gourmet Treats Crate', price: '₹ 1,799' })">+ Basket</button>
+              <button type="button" class="btn-igp-quote-sm" onclick="openQuoteModal({ title: 'Artisan Gourmet Treats Crate', price: '₹ 1,799' })">Request Quote</button>
+            </div>
           </div>
         </div>
 
-        <div class="product-card-coral">
-          <div class="product-card-media">
-            <span class="product-badge-pill">Hot 🔥</span>
-            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80" alt="Employee Welcome & Swag Kit">
-          </div>
-          <div class="product-card-body">
-            <h3>Employee Welcome & Swag Kit</h3>
-            <div class="product-card-subtitle">Branded tumbler, notebook, and snacks</div>
-          </div>
-          <div class="product-card-footer">
-            <div class="product-card-price">$65.00</div>
-            <button type="button" class="btn-pill-quote" onclick="openQuoteModal({ title: 'Employee Welcome & Swag Kit', price: '$65.00' })">
-              Request Quote
+        <div class="igp-product-card">
+          <div class="igp-card-media">
+            <span class="igp-badge-curated">HR Choice</span>
+            <button type="button" class="igp-wishlist-icon" aria-label="Save" onclick="this.classList.toggle('active')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
             </button>
+            <a href="/collections/all" class="igp-card-img-link">
+              <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80" alt="Tech & Drinkware Onboarding Kit">
+            </a>
+            <div class="igp-rating-badge"><span class="star-icon">★</span> 4.9 <span class="review-count">(410)</span></div>
+          </div>
+          <div class="igp-card-body">
+            <h3 class="igp-card-title"><a href="/collections/all">Tech & Drinkware Welcome Box</a></h3>
+            <div class="igp-price-row">
+              <span class="igp-current-price">₹ 1,999</span>
+              <span class="igp-mrp-price">₹ 2,799</span>
+              <span class="igp-discount-tag">28% OFF</span>
+            </div>
+            <div class="igp-delivery-pill"><span>⚡ Earliest Dispatch: 24h</span> &bull; <span>Flask & Diary Set</span></div>
+            <div class="igp-card-actions">
+              <button type="button" class="btn-igp-basket-sm" onclick="openQuoteModal({ title: 'Tech & Drinkware Welcome Box', price: '₹ 1,999' })">+ Basket</button>
+              <button type="button" class="btn-igp-quote-sm" onclick="openQuoteModal({ title: 'Tech & Drinkware Welcome Box', price: '₹ 1,999' })">Request Quote</button>
+            </div>
           </div>
         </div>
 
-        <div class="product-card-coral">
-          <div class="product-card-media">
-            <span class="product-badge-pill">Sale</span>
-            <img src="https://images.unsplash.com/photo-1607344645866-009c320b5ab8?auto=format&fit=crop&w=600&q=80" alt="Fireside Comforts Wellness Box">
-          </div>
-          <div class="product-card-body">
-            <h3>Fireside Comforts Wellness Box</h3>
-            <div class="product-card-subtitle">Aromatherapy candle, cozy socks & tea</div>
-          </div>
-          <div class="product-card-footer">
-            <div class="product-card-price">$95.00</div>
-            <button type="button" class="btn-pill-quote" onclick="openQuoteModal({ title: 'Fireside Comforts Wellness Box', price: '$95.00' })">
-              Request Quote
+        <div class="igp-product-card">
+          <div class="igp-card-media">
+            <span class="igp-badge-curated">Eco-Friendly</span>
+            <button type="button" class="igp-wishlist-icon" aria-label="Save" onclick="this.classList.toggle('active')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
             </button>
+            <a href="/collections/all" class="igp-card-img-link">
+              <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80" alt="Executive Leather Notebook & Pen Set">
+            </a>
+            <div class="igp-rating-badge"><span class="star-icon">★</span> 4.7 <span class="review-count">(88)</span></div>
+          </div>
+          <div class="igp-card-body">
+            <h3 class="igp-card-title"><a href="/collections/all">Executive Leather Journal & Metal Pen Set</a></h3>
+            <div class="igp-price-row">
+              <span class="igp-current-price">₹ 1,199</span>
+              <span class="igp-mrp-price">₹ 1,599</span>
+              <span class="igp-discount-tag">25% OFF</span>
+            </div>
+            <div class="igp-delivery-pill"><span>⚡ Earliest Dispatch: Today</span> &bull; <span>Laser Name Personalization</span></div>
+            <div class="igp-card-actions">
+              <button type="button" class="btn-igp-basket-sm" onclick="openQuoteModal({ title: 'Executive Leather Journal & Metal Pen Set', price: '₹ 1,199' })">+ Basket</button>
+              <button type="button" class="btn-igp-quote-sm" onclick="openQuoteModal({ title: 'Executive Leather Journal & Metal Pen Set', price: '₹ 1,199' })">Request Quote</button>
+            </div>
           </div>
         </div>
       {% endif %}
     </div>
 
-    <div style="text-align: center; margin-top: 3.5rem;">
-      <a href="/collections/all" class="btn btn-primary" style="padding: 0.9rem 2.5rem; font-size: 1rem;">
-        Explore Entire Catalog &rarr;
+    <div style="text-align: center; margin-top: 3rem;">
+      <a href="/collections/all" class="btn-igp-primary" style="padding: 0.85rem 2.5rem; font-size: 0.95rem; display: inline-block; text-decoration: none;">
+        View All Hampers & Gifts &rarr;
       </a>
     </div>
   </div>
@@ -132,11 +197,11 @@
 
 {% schema %}
 {
-  "name": "Featured Products Coral",
+  "name": "Featured Products",
   "settings": [],
   "presets": [
     {
-      "name": "Featured Products Coral"
+      "name": "Featured Products"
     }
   ]
 }

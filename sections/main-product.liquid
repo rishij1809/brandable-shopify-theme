@@ -1,34 +1,67 @@
 {% comment %}
   Brandable Main Product Template
-  For standalone items and pre-made hampers
+  IGP Gifting Style Product Details
 {% endcomment %}
 
-<div class="container" style="padding: 3rem 1.5rem;">
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem; align-items: start;">
-    <div>
-      {% if product.featured_image %}
-        <img src="{{ product.featured_image | image_url: width: 800 }}" 
-             alt="{{ product.title | escape }}" 
-             style="width: 100%; border-radius: var(--radius); border: 1px solid var(--color-border);">
-      {% endif %}
-    </div>
+<div class="container" style="padding: 2rem 1.25rem 4rem;">
+  <!-- Breadcrumbs -->
+  <nav class="igp-breadcrumb" aria-label="Breadcrumb">
+    <a href="/">Home</a>
+    <span class="breadcrumb-separator">&rsaquo;</span>
+    <a href="/collections/all">Corporate Gifts</a>
+    <span class="breadcrumb-separator">&rsaquo;</span>
+    <span class="breadcrumb-current">{{ product.title }}</span>
+  </nav>
 
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 3rem; align-items: start; background: #ffffff; padding: 2.5rem; border: 1px solid var(--igp-border); border-radius: var(--radius-card); box-shadow: var(--shadow-sm);">
+    <!-- Left Column: Product Media (IGP Frame) -->
     <div>
-      <h1 style="margin-top: 0;">{{ product.title }}</h1>
-      <div style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem; color: var(--color-primary);">
-        {{ product.price | money }}
+      <div style="position: relative; width: 100%; height: 420px; background: #fbfbfb; border: 1px solid var(--igp-border); border-radius: 6px; display: flex; align-items: center; justify-content: center; padding: 1.5rem; overflow: hidden;">
+        <span class="igp-badge-curated">Verified Quality</span>
+        
+        {% if product.featured_image %}
+          <img src="{{ product.featured_image | image_url: width: 800 }}" 
+               alt="{{ product.title | escape }}" 
+               style="max-width: 95%; max-height: 95%; object-fit: contain; display: block;">
+        {% else %}
+          <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=800&q=80" 
+               alt="{{ product.title | escape }}" 
+               style="max-width: 95%; max-height: 95%; object-fit: contain; display: block;">
+        {% endif %}
+
+        <div class="igp-rating-badge" style="bottom: 14px; left: 14px; font-size: 0.75rem; padding: 0.25rem 0.6rem;">
+          <span class="star-icon">★</span> 4.9 <span class="review-count">(156 Corporate Reviews)</span>
+        </div>
       </div>
 
-      <div style="margin-bottom: 2rem; color: var(--color-text);">
+      <div style="margin-top: 1rem; display: flex; align-items: center; gap: 0.75rem; font-size: 0.8rem; color: #555;">
+        <span>⚡ <strong>Earliest Dispatch:</strong> Today</span>
+        <span>&bull;</span>
+        <span>🎨 <strong>Free Laser Logo</strong> on 25+ units</span>
+      </div>
+    </div>
+
+    <!-- Right Column: Product Details & B2B Quote Action -->
+    <div>
+      <h1 style="margin: 0 0 0.75rem 0; font-size: 1.75rem; color: var(--igp-text); font-weight: 800;">{{ product.title }}</h1>
+      
+      <div class="igp-price-row" style="margin-bottom: 1.25rem;">
+        <span class="igp-current-price" style="font-size: 1.4rem;">{{ product.price | money }}</span>
+        <span class="igp-mrp-price" style="font-size: 0.95rem;">{{ product.price | times: 1.25 | money }}</span>
+        <span class="igp-discount-tag" style="font-size: 0.95rem;">20% OFF</span>
+        <span style="font-size: 0.78rem; color: var(--igp-text-light); margin-left: auto;">(Inclusive of GST)</span>
+      </div>
+
+      <div style="margin-bottom: 1.75rem; color: var(--igp-text-muted); font-size: 0.95rem; line-height: 1.6;">
         {{ product.description }}
       </div>
 
-      <div style="background: #faf8f5; border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1.5rem; font-size: 0.85rem;">
-        <strong>B2B Tiered Volume Pricing Available:</strong>
-        <div style="margin-top: 0.4rem; color: #555;">
-          &bull; 10 - 49 units: Standard pricing<br>
-          &bull; 50 - 99 units: 10% volume discount + free card personalization<br>
-          &bull; 100+ units: 20% volume discount + custom laser engraving
+      <div style="background: #fafafa; border: 1px solid var(--igp-border); border-radius: 6px; padding: 1.25rem; margin-bottom: 1.75rem; font-size: 0.85rem;">
+        <strong style="color: var(--igp-text); font-size: 0.9rem;">B2B Tiered Volume Pricing & Discounts:</strong>
+        <div style="margin-top: 0.5rem; color: #555; line-height: 1.6;">
+          &bull; <strong>10 - 49 units:</strong> Standard pricing + Free greeting card<br>
+          &bull; <strong>50 - 99 units:</strong> 10% volume discount + Free custom logo branding<br>
+          &bull; <strong>100+ units:</strong> 20% volume discount + Custom box packaging & drop-shipping
         </div>
       </div>
 
@@ -36,18 +69,18 @@
         {% assign variant = product.selected_or_first_available_variant | default: product.variants.first %}
         <input type="hidden" name="id" value="{{ variant.id }}">
         
-        <div class="form-group">
+        <div class="form-group" style="max-width: 220px; margin-bottom: 1.5rem;">
           <label for="ProductQuantity">Estimated Units Needed (MOQ: 10)</label>
-          <input type="number" id="ProductQuantity" name="quantity" value="10" min="1" style="max-width: 140px; border-radius: 12px;">
+          <input type="number" id="ProductQuantity" name="quantity" value="10" min="1" style="border-radius: 4px; padding: 0.6rem 0.8rem; font-size: 0.95rem; font-weight: 700;">
         </div>
 
-        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-          <button type="submit" class="btn btn-secondary" style="flex: 1; min-width: 180px;">
+        <div style="display: flex; gap: 0.85rem; flex-wrap: wrap;">
+          <button type="submit" class="btn-igp-outline" style="flex: 1; min-width: 160px; padding: 0.85rem 1.2rem; font-size: 0.95rem;">
             + Add to Basket
           </button>
           <button type="button" 
-                  class="btn btn-primary" 
-                  style="flex: 1.2; min-width: 200px;" 
+                  class="btn-igp-primary" 
+                  style="flex: 1.3; min-width: 200px; padding: 0.85rem 1.4rem; font-size: 0.95rem;" 
                   onclick="openQuoteModal({ title: {{ product.title | json }}, price: {{ product.price | money | json }}, quantity: document.getElementById('ProductQuantity').value })">
             Request Quote Now &rarr;
           </button>
@@ -63,4 +96,3 @@
   "settings": []
 }
 {% endschema %}
-

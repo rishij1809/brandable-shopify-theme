@@ -1,63 +1,74 @@
 {% comment %}
   Brandable About Us Page Template
+  IGP Gifting Style About Page
 {% endcomment %}
 
-<div class="container">
-  <div class="page-hero-banner">
-    <span class="hero-pill-badge" style="background: rgba(255,255,255,0.25);">Our Mission & Story</span>
-    <h1>Elevating Corporate Gifting</h1>
-    <p>We help innovative companies show appreciation to clients, executive partners, and remote teams through bespoke curated gift boxes.</p>
+<div class="container" style="padding: 2rem 1.25rem 4rem;">
+  <!-- Breadcrumb -->
+  <nav class="igp-breadcrumb" aria-label="Breadcrumb">
+    <a href="/">Home</a>
+    <span class="breadcrumb-separator">&rsaquo;</span>
+    <span class="breadcrumb-current">About Brandable</span>
+  </nav>
+
+  <div class="igp-section-heading" style="text-align: left; margin-bottom: 2.5rem; background: #ffffff; padding: 2.5rem; border: 1px solid var(--igp-border); border-radius: var(--radius-card);">
+    <span class="igp-badge-curated" style="position: static; display: inline-block; margin-bottom: 0.75rem;">Our Mission & Story</span>
+    <h1 style="font-size: 2.4rem; font-weight: 800; color: var(--igp-text); margin: 0 0 0.75rem 0;">
+      Elevating Corporate & Celebration Gifting
+    </h1>
+    <p style="font-size: 1.05rem; color: var(--igp-text-muted); max-width: 800px; line-height: 1.6; margin: 0;">
+      We help innovative companies and leaders show genuine appreciation to clients, executive partners, and team members through bespoke curated gift boxes and luxury celebration hampers.
+    </p>
   </div>
 
-  <div class="about-features-grid">
-    <div class="about-feature-card">
-      <div class="about-feature-icon">✨</div>
-      <h3>100% In-House Branding</h3>
-      <p style="color: var(--color-text-muted); font-size: 0.95rem; line-height: 1.6;">
-        From custom laser-engraved wooden lids to debossed leather and personalized foil-stamped greeting cards, every box is crafted to reflect your brand identity.
+  <div class="about-features-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+    <div style="background: #ffffff; border: 1px solid var(--igp-border); border-radius: var(--radius-card); padding: 2rem; box-shadow: var(--shadow-sm);">
+      <div style="width: 52px; height: 52px; border-radius: 50%; background: var(--igp-red-light); color: var(--igp-red); font-size: 1.4rem; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">✨</div>
+      <h3 style="font-size: 1.15rem; font-weight: 700; margin: 0 0 0.5rem 0;">100% Custom In-House Branding</h3>
+      <p style="color: var(--igp-text-muted); font-size: 0.9rem; line-height: 1.6; margin: 0;">
+        From laser-engraved wooden lids to debossed leather journals and personalized greeting cards, every box is crafted to reflect your unique brand identity.
       </p>
     </div>
 
-    <div class="about-feature-card">
-      <div class="about-feature-icon">🛡️</div>
-      <h3>Zero Payment Upfront</h3>
-      <p style="color: var(--color-text-muted); font-size: 0.95rem; line-height: 1.6;">
-        Our lead-first model means you receive full digital 3D mockups and itemized tiered volume quotes before committing a single dollar.
+    <div style="background: #ffffff; border: 1px solid var(--igp-border); border-radius: var(--radius-card); padding: 2rem; box-shadow: var(--shadow-sm);">
+      <div style="width: 52px; height: 52px; border-radius: 50%; background: var(--igp-red-light); color: var(--igp-red); font-size: 1.4rem; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">🛡️</div>
+      <h3 style="font-size: 1.15rem; font-weight: 700; margin: 0 0 0.5rem 0;">Zero Upfront Payment</h3>
+      <p style="color: var(--igp-text-muted); font-size: 0.9rem; line-height: 1.6; margin: 0;">
+        Our lead-first corporate model means you receive full digital 3D mockups and itemized tiered volume quotes before committing payment.
       </p>
     </div>
 
-    <div class="about-feature-card">
-      <div class="about-feature-icon">🚀</div>
-      <h3>Multi-Address Drop Shipping</h3>
-      <p style="color: var(--color-text-muted); font-size: 0.95rem; line-height: 1.6;">
-        Simply provide your recipient spreadsheet. We handle individual white-glove packaging, tracking, and delivery directly to domestic and international doorsteps.
+    <div style="background: #ffffff; border: 1px solid var(--igp-border); border-radius: var(--radius-card); padding: 2rem; box-shadow: var(--shadow-sm);">
+      <div style="width: 52px; height: 52px; border-radius: 50%; background: var(--igp-red-light); color: var(--igp-red); font-size: 1.4rem; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">🚚</div>
+      <h3 style="font-size: 1.15rem; font-weight: 700; margin: 0 0 0.5rem 0;">Multi-Address Drop Shipping</h3>
+      <p style="color: var(--igp-text-muted); font-size: 0.9rem; line-height: 1.6; margin: 0;">
+        Simply provide your recipient spreadsheet. We handle individual white-glove packaging, tracking, and delivery directly to domestic and global doorsteps.
       </p>
     </div>
   </div>
 
   <!-- Corporate Impact Numbers -->
-  <div style="background: #ffffff; border-radius: var(--radius-card); padding: 3rem 2rem; border: 1px solid var(--color-border); text-align: center; margin-bottom: 4rem;">
-    <h2 style="font-size: 1.8rem; margin: 0 0 2rem 0; color: var(--color-text-dark);">Brandable By The Numbers</h2>
+  <div style="background: #ffffff; border-radius: var(--radius-card); padding: 3rem 2rem; border: 1px solid var(--igp-border); text-align: center; margin-bottom: 4rem; box-shadow: var(--shadow-sm);">
+    <h2 style="font-size: 1.8rem; margin: 0 0 2rem 0; color: var(--igp-text); font-weight: 800;">Brandable By The Numbers</h2>
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
       <div>
-        <div style="font-size: 2.8rem; font-weight: 800; color: var(--color-coral-dark);">50,000+</div>
-        <div style="color: var(--color-text-muted); font-weight: 600;">Custom Boxes Delivered</div>
+        <div style="font-size: 2.8rem; font-weight: 900; color: var(--igp-red);">50,000+</div>
+        <div style="color: var(--igp-text-muted); font-weight: 600; font-size: 0.95rem;">Custom Boxes Delivered</div>
       </div>
       <div>
-        <div style="font-size: 2.8rem; font-weight: 800; color: var(--color-coral-dark);">1,200+</div>
-        <div style="color: var(--color-text-muted); font-weight: 600;">Corporate Clients Worldwide</div>
+        <div style="font-size: 2.8rem; font-weight: 900; color: var(--igp-red);">1,200+</div>
+        <div style="color: var(--igp-text-muted); font-weight: 600; font-size: 0.95rem;">Corporate Clients Worldwide</div>
       </div>
       <div>
-        <div style="font-size: 2.8rem; font-weight: 800; color: var(--color-coral-dark);">99.8%</div>
-        <div style="color: var(--color-text-muted); font-weight: 600;">On-Time Event Delivery</div>
+        <div style="font-size: 2.8rem; font-weight: 900; color: var(--igp-green);">99.8%</div>
+        <div style="color: var(--igp-text-muted); font-weight: 600; font-size: 0.95rem;">On-Time Event Delivery</div>
       </div>
     </div>
 
     <div style="margin-top: 2.5rem;">
-      <button type="button" class="btn btn-primary" onclick="openQuoteModal()">
+      <button type="button" class="btn-igp-primary" style="padding: 0.85rem 2.5rem; font-size: 0.95rem;" onclick="openQuoteModal()">
         Partner With Our Gifting Team &rarr;
       </button>
     </div>
   </div>
 </div>
-

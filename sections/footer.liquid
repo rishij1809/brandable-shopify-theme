@@ -1,61 +1,109 @@
-<footer class="site-footer">
-  <div class="container">
+<footer class="site-footer igp-footer">
+  <!-- IGP Trust Strip -->
+  <div class="igp-trust-strip">
+    <div class="container">
+      <div class="trust-strip-grid">
+        <div class="trust-strip-item">
+          <span class="trust-strip-icon">🚚</span>
+          <div>
+            <strong>100% On-Time Delivery</strong>
+            <span>Pan-India express drop-shipping</span>
+          </div>
+        </div>
+        <div class="trust-strip-item">
+          <span class="trust-strip-icon">🏢</span>
+          <div>
+            <strong>1,200+ Corporate Clients</strong>
+            <span>Startups to Fortune 500s</span>
+          </div>
+        </div>
+        <div class="trust-strip-item">
+          <span class="trust-strip-icon">✨</span>
+          <div>
+            <strong>Free Custom Branding</strong>
+            <span>Laser engraved on 25+ units</span>
+          </div>
+        </div>
+        <div class="trust-strip-item">
+          <span class="trust-strip-icon">🛡️</span>
+          <div>
+            <strong>Zero Upfront Payment</strong>
+            <span>Formal GST invoicing & credit</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Footer Content -->
+  <div class="container" style="padding-top: 3.5rem; padding-bottom: 3rem;">
     <div class="footer-grid">
+      <!-- Brand & Mission Column -->
       <div class="footer-col">
-        <a href="/" class="site-logo" style="margin-bottom: 1.25rem; display: inline-block;">
-          <img src="{{ 'brandable-logo.png' | asset_url }}" 
-               alt="{{ shop.name | default: 'Brandable' }}" 
-               class="site-logo-img" 
-               width="140" 
-               height="34">
-        </a>
-        <p style="font-size: 0.9rem; line-height: 1.7; color: #9ca3af; max-width: 340px;">
-          Brandable delivers bespoke corporate gifting, custom curated gift boxes, and executive hampers for companies worldwide. Zero upfront payment, custom logo branding, and white-glove drop shipping.
+        <div class="igp-footer-brand">
+          <span class="igp-brand-symbol">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e11d2d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 12 20 22 4 22 4 12"></polyline>
+              <rect x="2" y="7" width="20" height="5"></rect>
+              <line x1="12" y1="22" x2="12" y2="7"></line>
+              <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+              <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+            </svg>
+          </span>
+          <span class="igp-brand-name">brandable</span>
+        </div>
+        <p class="footer-brand-desc">
+          Brandable delivers bespoke corporate gifting, custom curated gift boxes, and executive hampers for companies worldwide. Gift that feeling with zero payment upfront, custom laser engraving, and white-glove drop shipping.
         </p>
       </div>
 
+      <!-- Categories Column -->
       <div class="footer-col">
         <h4>Catalog & Boxes</h4>
         <ul>
-          <li><a href="/#box-builder">Custom Box Builder</a></li>
-          <li><a href="/collections/all">Executive Hampers</a></li>
+          <li><a href="/#box-builder">Custom Box Builder Studio</a></li>
+          <li><a href="/collections/all">Executive Luxury Hampers</a></li>
           <li><a href="/collections/all">Employee Onboarding Kits</a></li>
-          <li><a href="/collections/all">Holiday Gift Baskets</a></li>
-          <li><a href="/pages/about">About Brandable</a></li>
-          <li><a href="/pages/contact">Contact & Inquiry</a></li>
+          <li><a href="/collections/all">Drinkware & Flasks</a></li>
+          <li><a href="/collections/all">Diaries & Premium Pens</a></li>
+          <li><a href="/collections/all">Diwali & Holiday Hampers</a></li>
         </ul>
       </div>
 
+      <!-- Corporate Services Column -->
       <div class="footer-col">
         <h4>Corporate Services</h4>
         <ul>
           <li><a href="/#how-it-works">How Gifting Works</a></li>
           <li><a href="javascript:void(0)" onclick="openQuoteModal()">Request Custom Quote</a></li>
-          <li><a href="javascript:void(0)" onclick="openQuoteModal()">Bulk & Tiered Pricing</a></li>
-          <li><a href="javascript:void(0)" onclick="openQuoteModal()">Multi-Address Shipping</a></li>
-          <li><a href="/cart">View Quote Basket</a></li>
+          <li><a href="javascript:void(0)" onclick="openQuoteModal()">Volume Pricing & MOQs</a></li>
+          <li><a href="javascript:void(0)" onclick="openQuoteModal()">Multi-Address Drop Shipping</a></li>
+          <li><a href="/pages/about">About Brandable</a></li>
+          <li><a href="/pages/contact">Contact & Inquiry</a></li>
         </ul>
       </div>
 
+      <!-- Corporate Concierge Column -->
       <div class="footer-col">
         <h4>Corporate Concierge</h4>
         <p style="font-size: 0.875rem; color: #9ca3af; margin-bottom: 0.75rem;">
-          Have questions or an urgent holiday gifting deadline?
+          Have questions or an urgent corporate deadline?
         </p>
         <p style="font-size: 0.9rem; color: #fff; margin: 0 0 0.5rem 0;">
-          <strong>Email:</strong> concierge@brandable.example.com
+          <strong>Email:</strong> corporate@brandable.example.com
         </p>
         <p style="font-size: 0.9rem; color: #fff; margin: 0 0 1.25rem 0;">
-          <strong>Phone:</strong> +1 (800) 555-GIFT
+          <strong>Hotline:</strong> +91 98765 43210
         </p>
-        <button type="button" class="btn btn-green" style="padding: 0.6rem 1rem; font-size: 0.8rem;" onclick="openQuoteModal()">
-          Talk to Gifting Specialist
+        <button type="button" class="btn-igp-primary" style="padding: 0.65rem 1.25rem; font-size: 0.85rem;" onclick="openQuoteModal()">
+          Talk to Gifting Concierge &rarr;
         </button>
       </div>
     </div>
 
-    <div class="footer-bottom">
-      <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name | default: 'Brandable' }}. All rights reserved. B2B Corporate Gifting & Lead-Generation Platform.</p>
+    <!-- Footer Bottom Row -->
+    <div class="igp-footer-bottom">
+      <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name | default: 'Brandable' }}. All rights reserved &bull; B2B Corporate Gifting Platform &bull; Zero Upfront Payment</p>
     </div>
   </div>
 </footer>
@@ -63,7 +111,11 @@
 {% schema %}
 {
   "name": "Footer",
-  "settings": []
+  "settings": [],
+  "presets": [
+    {
+      "name": "Footer"
+    }
+  ]
 }
 {% endschema %}
-

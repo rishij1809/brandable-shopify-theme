@@ -1,54 +1,60 @@
-<section class="pill-showcase-section">
+<section class="igp-showcase-section">
   <div class="container">
-    <div class="section-pill-header">
-      <h2>Curated Gifting Collections</h2>
-      <div class="dots-divider">
-        <span></span><span></span><span></span>
-      </div>
+    <div class="igp-section-heading">
+      <h2>Handpicked Gifting Collections</h2>
+      <p>Exclusive corporate hampers, custom crates, and bespoke team gifts</p>
     </div>
 
-    <div class="pill-cards-grid">
-      <!-- Card 1: Rose Pill -->
-      <a href="/collections/all" class="pill-card pill-card-rose">
-        <div class="pill-card-img-wrap">
-          <img src="https://images.unsplash.com/photo-1543257580-7269da773bf5?auto=format&fit=crop&w=160&q=80" alt="Executive Hampers">
+    <div class="igp-spotlight-grid">
+      <!-- Card 1: Executive Luxury -->
+      <a href="/collections/all" class="igp-spotlight-card">
+        <div class="spotlight-thumb">
+          <img src="https://images.unsplash.com/photo-1543257580-7269da773bf5?auto=format&fit=crop&w=300&q=80" alt="Executive Hampers" loading="lazy">
         </div>
-        <div class="pill-card-content">
+        <div class="spotlight-info">
+          <span class="spotlight-tag">PREMIUM</span>
           <h3>Executive Hampers</h3>
-          <span class="pill-card-cta">Explore &rarr;</span>
+          <p>Wine, artisan delicacies & laser-engraved keepsakes</p>
+          <span class="spotlight-link">Explore Collection &rarr;</span>
         </div>
       </a>
 
-      <!-- Card 2: Gold Pill -->
-      <a href="/#box-builder" class="pill-card pill-card-gold">
-        <div class="pill-card-img-wrap">
-          <img src="https://images.unsplash.com/photo-1513297887119-d46091b24bfa?auto=format&fit=crop&w=160&q=80" alt="Custom Gift Boxes">
+      <!-- Card 2: Custom Box Builder -->
+      <a href="/#box-builder" class="igp-spotlight-card highlight-card">
+        <div class="spotlight-thumb">
+          <img src="https://images.unsplash.com/photo-1513297887119-d46091b24bfa?auto=format&fit=crop&w=300&q=80" alt="Custom Gift Box Studio" loading="lazy">
         </div>
-        <div class="pill-card-content">
-          <h3>Custom Gift Boxes</h3>
-          <span class="pill-card-cta">Build Box &rarr;</span>
-        </div>
-      </a>
-
-      <!-- Card 3: Slate Pill -->
-      <a href="/collections/all" class="pill-card pill-card-slate">
-        <div class="pill-card-img-wrap">
-          <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=160&q=80" alt="Employee Onboarding">
-        </div>
-        <div class="pill-card-content">
-          <h3>Employee Kits</h3>
-          <span class="pill-card-cta">Explore &rarr;</span>
+        <div class="spotlight-info">
+          <span class="spotlight-tag tag-red">CUSTOM STUDIO</span>
+          <h3>Build a Custom Box</h3>
+          <p>Select your box style, goodies & corporate greeting card</p>
+          <span class="spotlight-link">Start Building &rarr;</span>
         </div>
       </a>
 
-      <!-- Card 4: Cocoa Pill -->
-      <a href="/collections/all" class="pill-card pill-card-cocoa">
-        <div class="pill-card-img-wrap">
-          <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=160&q=80" alt="Artisan Sweets">
+      <!-- Card 3: Employee Onboarding -->
+      <a href="/collections/all" class="igp-spotlight-card">
+        <div class="spotlight-thumb">
+          <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=300&q=80" alt="Employee Onboarding" loading="lazy">
         </div>
-        <div class="pill-card-content">
-          <h3>Artisan Treats</h3>
-          <span class="pill-card-cta">Explore &rarr;</span>
+        <div class="spotlight-info">
+          <span class="spotlight-tag">HR FAVORITE</span>
+          <h3>Employee Welcome Kits</h3>
+          <p>Notebooks, insulated bottles, hoodies & tech swag</p>
+          <span class="spotlight-link">View Kits &rarr;</span>
+        </div>
+      </a>
+
+      <!-- Card 4: Artisan Treats -->
+      <a href="/collections/all" class="igp-spotlight-card">
+        <div class="spotlight-thumb">
+          <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=300&q=80" alt="Artisan Treats" loading="lazy">
+        </div>
+        <div class="spotlight-info">
+          <span class="spotlight-tag">GOURMET</span>
+          <h3>Artisan Delights</h3>
+          <p>Handcrafted Belgian chocolates, dry fruits & gourmet teas</p>
+          <span class="spotlight-link">Browse Treats &rarr;</span>
         </div>
       </a>
     </div>
@@ -58,6 +64,14 @@
 {% schema %}
 {
   "name": "Horizontal Pill Showcase",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Horizontal Pill Showcase"
+    }
+  ]
+}
+{% endschema %}
   "settings": [],
   "presets": [
     {

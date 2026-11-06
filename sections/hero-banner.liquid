@@ -1,59 +1,88 @@
-<section class="hero-wrapper">
+<section class="igp-hero-section">
   <div class="container">
-    <div class="hero-card">
+    <div class="igp-hero-card">
       <!-- Left Content Column -->
-      <div>
-        <span class="hero-pill-badge">✨ Exclusive Corporate Gifting &bull; Bulk Discounts Available</span>
-        <h1>Curated Corporate Gift Boxes & Hampers</h1>
-        <p class="hero-desc">
-          Hand-picked artisan goodies, laser-engraved branding, and white-glove multi-address drop shipping worldwide. Zero payment upfront.
+      <div class="igp-hero-content">
+        <div class="igp-hero-pill-badge">
+          <span>✨</span> India's #1 B2B Corporate & Celebration Gifting Platform
+        </div>
+        
+        <h1 class="igp-hero-title">
+          Curated Corporate & <span class="text-highlight-red">Celebration Gifts</span>
+        </h1>
+        
+        <p class="igp-hero-subtitle">
+          Delight employees, clients, and partners with artisan gift boxes, laser-engraved luxury hampers, and custom-branded merchandise. Zero payment upfront &bull; Direct corporate invoicing.
         </p>
 
-        <!-- Category Pill Selector (Directly matching reference image) -->
-        <div class="hero-category-selector">
-          <select id="hero-category-select" onchange="if(this.value) window.location.href=this.value;">
-            <option value="/collections/all">Select Category...</option>
-            <option value="/#box-builder">Custom Gift Boxes (Builder)</option>
-            <option value="/collections/all">Executive Reserve Hampers</option>
-            <option value="/collections/all">Employee Onboarding Kits</option>
-            <option value="/collections/all">Artisan Chocolates & Coffees</option>
-            <option value="/collections/all">Wellness & Team Care</option>
-          </select>
-          <a href="/collections/all" class="hero-selector-btn">
-            <span>Explore Hampers</span>
-            <span>&rarr;</span>
+        <!-- Fast Action CTAs -->
+        <div class="igp-hero-ctas">
+          <a href="/collections/all" class="btn-igp-primary">
+            Explore All Hampers &rarr;
+          </a>
+          <a href="/#box-builder" class="btn-igp-outline">
+            Build Custom Box 📦
           </a>
         </div>
 
-        <!-- Social Proof Avatar Cluster (Matching reference image) -->
-        <div class="hero-social-proof">
-          <div class="avatar-group">
+        <!-- Trust Features Strip (Iconic IGP Promises) -->
+        <div class="igp-hero-trust-row">
+          <div class="igp-trust-item">
+            <span class="igp-trust-icon">⚡</span>
+            <div>
+              <strong>Pan-India Express</strong>
+              <span>Same-day dispatch hubs</span>
+            </div>
+          </div>
+          <div class="igp-trust-item">
+            <span class="igp-trust-icon">🎨</span>
+            <div>
+              <strong>Free Logo Branding</strong>
+              <span>Laser engraved on 25+ units</span>
+            </div>
+          </div>
+          <div class="igp-trust-item">
+            <span class="igp-trust-icon">🛡️</span>
+            <div>
+              <strong>Zero Upfront Cost</strong>
+              <span>Pay on delivery approval</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Client Social Proof Cluster -->
+        <div class="igp-social-proof">
+          <div class="igp-avatar-group">
             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Client 1">
             <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Client 2">
             <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=100&q=80" alt="Client 3">
           </div>
-          <div class="social-proof-text">
-            <strong>Trusted by 1,200+ Companies</strong>
-            <span class="social-proof-stars">★★★★★ 4.9 Rating</span>
+          <div class="igp-proof-text">
+            <strong>Trusted by 1,200+ Corporate Brands</strong>
+            <span class="igp-stars"><span class="star-green">★</span> 4.9/5 from 4,500+ Reviews</span>
           </div>
-        </div>
-
-        <!-- Bottom Pill Link -->
-        <div class="hero-bottom-link">
-          <span>Planning a Custom Project?</span>
-          <button type="button" onclick="openQuoteModal()">Request Custom Quote</button>
         </div>
       </div>
 
-      <!-- Right Visual Column (Circular Frame & Hamper Imagery) -->
-      <div class="hero-visual-col">
-        <div class="hero-circle-backdrop">
+      <!-- Right Visual Column (IGP Curated Hamper Showcase) -->
+      <div class="igp-hero-visual">
+        <div class="igp-hero-image-wrap">
           <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=800&q=80" 
                alt="Luxury Corporate Gifting Hamper" 
-               class="hero-visual-img" 
+               class="igp-hero-img" 
                loading="eager" 
                width="800" 
                height="600">
+          <div class="igp-hero-floating-card">
+            <div class="floating-card-icon">🎁</div>
+            <div>
+              <div class="floating-card-title">Executive Reserve Hamper</div>
+              <div class="floating-card-sub">MOQ: 10 Units &bull; Custom Branded</div>
+            </div>
+            <button type="button" class="floating-quote-btn" onclick="openQuoteModal({ title: 'The Executive Reserve Hamper', price: '₹ 1,499' })">
+              Quote
+            </button>
+          </div>
         </div>
       </div>
     </div>

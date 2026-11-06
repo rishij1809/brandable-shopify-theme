@@ -1,42 +1,183 @@
-<header class="site-header">
-  <div class="container">
-    <a href="/" class="site-logo" aria-label="{{ shop.name | default: 'Brandable' }}">
-      <img src="{{ 'brandable-logo.png' | asset_url }}" 
-           alt="{{ shop.name | default: 'Brandable' }}" 
-           class="site-logo-img" 
-           width="140" 
-           height="38">
-    </a>
-
-    <nav class="site-nav">
-      <a href="/" class="{% if request.page_type == 'index' and request.path == '/' %}active{% endif %}">Home</a>
-      <a href="/collections/all" class="{% if request.page_type == 'collection' %}active{% endif %}">Shop</a>
-      <a href="/#box-builder">Build a Box</a>
-      <a href="/#how-it-works">How It Works</a>
-      <a href="/pages/about" class="{% if request.path contains 'about' %}active{% endif %}">About Us</a>
-      <a href="/pages/contact" class="{% if request.path contains 'contact' %}active{% endif %}">Contact</a>
-    </nav>
-
-    <div class="header-actions">
-      <button type="button" class="btn-header-quote" onclick="openQuoteModal()">
-        Request Quote
-      </button>
-
-      <a href="/cart" class="header-cart-icon" title="View Quote Basket" aria-label="Quote Basket">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-          <line x1="3" y1="6" x2="21" y2="6"></line>
-          <path d="M16 10a4 4 0 0 1-8 0"></path>
-        </svg>
-        <span class="cart-badge" id="cart-item-count">{{ cart.item_count }}</span>
+<header class="site-header igp-header">
+  <!-- Main Header Tier -->
+  <div class="igp-header-main">
+    <div class="container igp-header-container">
+      <!-- Logo Section: IGP Typographic Style for Brandable -->
+      <a href="/" class="igp-logo-link" aria-label="Brandable Corporate Gifting">
+        <div class="igp-brand-wrap">
+          <span class="igp-brand-symbol">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#e11d2d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 12 20 22 4 22 4 12"></polyline>
+              <rect x="2" y="7" width="20" height="5"></rect>
+              <line x1="12" y1="22" x2="12" y2="7"></line>
+              <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+              <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+            </svg>
+          </span>
+          <span class="igp-brand-name">brandable</span>
+        </div>
+        <span class="igp-brand-tagline">gift that feeling &bull; corporate</span>
       </a>
+
+      <!-- Location Selector (Iconic IGP Feature) -->
+      <div class="igp-location-picker" id="igp-location-picker" onclick="toggleCityDropdown(event)">
+        <span class="igp-pin-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e11d2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+        </span>
+        <div class="igp-location-text">
+          <span class="igp-loc-label">Deliver To</span>
+          <span class="igp-loc-current" id="current-location-text">Select City / Pincode</span>
+        </div>
+        <span class="igp-caret">&or;</span>
+
+        <!-- Dropdown City List -->
+        <div class="igp-city-dropdown" id="igp-city-dropdown">
+          <div class="city-dropdown-header">Select Corporate Hub</div>
+          <div class="city-chips">
+            <button type="button" class="city-chip" onclick="selectCity('Delhi NCR', '110001', event)">Delhi NCR</button>
+            <button type="button" class="city-chip" onclick="selectCity('Mumbai', '400001', event)">Mumbai</button>
+            <button type="button" class="city-chip" onclick="selectCity('Bengaluru', '560001', event)">Bengaluru</button>
+            <button type="button" class="city-chip" onclick="selectCity('Hyderabad', '500001', event)">Hyderabad</button>
+            <button type="button" class="city-chip" onclick="selectCity('Pune', '411001', event)">Pune</button>
+            <button type="button" class="city-chip" onclick="selectCity('Chennai', '600001', event)">Chennai</button>
+          </div>
+          <div class="city-pincode-input-wrap">
+            <input type="text" id="custom-pincode-input" placeholder="Or enter 6-digit Pincode" maxlength="6" onclick="event.stopPropagation()">
+            <button type="button" onclick="applyCustomPincode(event)">Apply</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wide Search Bar (IGP Style) -->
+      <div class="igp-search-wrapper">
+        <form action="/search" method="get" class="igp-search-form">
+          <input type="text" 
+                 name="q" 
+                 placeholder="Search for corporate gifts, hampers, diaries, drinkware..." 
+                 value="{{ search.terms | escape }}" 
+                 class="igp-search-input" 
+                 autocomplete="off">
+          <button type="submit" class="igp-search-btn" aria-label="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+        </form>
+      </div>
+
+      <!-- Action Items & Buttons -->
+      <div class="igp-header-actions">
+        <a href="/#box-builder" class="igp-action-item igp-build-box-pill">
+          <span class="igp-badge-new">NEW</span>
+          <span class="igp-action-label">Build a Box</span>
+        </a>
+
+        <a href="/cart" class="igp-action-item igp-cart-btn" title="View Quote Basket">
+          <span class="igp-cart-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            <span class="cart-badge" id="cart-item-count">{{ cart.item_count }}</span>
+          </span>
+          <span class="igp-cart-text">Basket</span>
+        </a>
+
+        <button type="button" class="btn-igp-primary" onclick="openQuoteModal()">
+          Request Quote
+        </button>
+      </div>
     </div>
   </div>
+
+  <!-- Secondary Category Ribbon (IGP Horizontal Bar) -->
+  <nav class="igp-category-bar">
+    <div class="container igp-category-container">
+      <a href="/collections/all" class="igp-cat-link {% if request.page_type == 'collection' %}active{% endif %}">
+        All Hampers
+      </a>
+      <a href="/#box-builder" class="igp-cat-link">
+        Build a Box <span class="igp-ribbon-tag">CUSTOM</span>
+      </a>
+      <a href="/collections/all" class="igp-cat-link">
+        Executive Combos
+      </a>
+      <a href="/collections/all" class="igp-cat-link">
+        Employee Onboarding
+      </a>
+      <a href="/collections/all" class="igp-cat-link">
+        Drinkware & Bottles
+      </a>
+      <a href="/collections/all" class="igp-cat-link">
+        Diaries & Stationary
+      </a>
+      <a href="/collections/all" class="igp-cat-link">
+        Apparel & Bags
+      </a>
+      <a href="/collections/all" class="igp-cat-link">
+        Diwali & Festive
+      </a>
+      <a href="/#how-it-works" class="igp-cat-link">
+        How It Works
+      </a>
+      <a href="/pages/about" class="igp-cat-link {% if request.path contains 'about' %}active{% endif %}">
+        About Brandable
+      </a>
+      <a href="/pages/contact" class="igp-cat-link {% if request.path contains 'contact' %}active{% endif %}">
+        Contact Concierge
+      </a>
+    </div>
+  </nav>
 </header>
+
+<script>
+  function toggleCityDropdown(e) {
+    e.stopPropagation();
+    const dropdown = document.getElementById('igp-city-dropdown');
+    if (dropdown) dropdown.classList.toggle('show');
+  }
+
+  function selectCity(cityName, pin, e) {
+    if (e) e.stopPropagation();
+    const textEl = document.getElementById('current-location-text');
+    if (textEl) textEl.textContent = cityName + ' (' + pin + ')';
+    const dropdown = document.getElementById('igp-city-dropdown');
+    if (dropdown) dropdown.classList.remove('show');
+  }
+
+  function applyCustomPincode(e) {
+    if (e) e.stopPropagation();
+    const input = document.getElementById('custom-pincode-input');
+    if (input && input.value.trim().length >= 4) {
+      const textEl = document.getElementById('current-location-text');
+      if (textEl) textEl.textContent = 'Pincode ' + input.value.trim();
+      const dropdown = document.getElementById('igp-city-dropdown');
+      if (dropdown) dropdown.classList.remove('show');
+    }
+  }
+
+  document.addEventListener('click', function(e) {
+    const dropdown = document.getElementById('igp-city-dropdown');
+    const picker = document.getElementById('igp-location-picker');
+    if (dropdown && !picker.contains(e.target)) {
+      dropdown.classList.remove('show');
+    }
+  });
+</script>
 
 {% schema %}
 {
   "name": "Header",
-  "settings": []
+  "settings": [],
+  "presets": [
+    {
+      "name": "Header"
+    }
+  ]
 }
 {% endschema %}

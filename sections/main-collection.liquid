@@ -1,72 +1,145 @@
 {% comment %}
   Brandable Main Collection Template
-  Shop / Catalog Multi-Page Template with category tabs and coral cards
+  Design & Architecture modeled after IGP (https://www.igp.com/birthday-gifts)
 {% endcomment %}
 
-<div class="container" style="padding: 2.5rem 1.5rem 4rem;">
-  <div class="page-hero-banner" style="margin-bottom: 2.5rem; padding: 2.5rem 1.5rem;">
-    <span class="hero-pill-badge" style="background: rgba(255,255,255,0.25);">Catalog & Hampers</span>
-    <h1 style="font-size: 2.5rem;">{{ collection.title | default: 'Corporate Hampers & Gifts' }}</h1>
-    <p>{{ collection.description | default: 'Explore ready-to-ship luxury hampers, branded crates, and custom gift bundles.' }}</p>
-  </div>
+<div class="igp-collection-page">
+  <div class="container">
+    <!-- Breadcrumb Bar -->
+    <nav class="igp-breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">&rsaquo;</span>
+      <a href="/collections/all">Corporate Gifting</a>
+      <span class="breadcrumb-separator">&rsaquo;</span>
+      <span class="breadcrumb-current">{{ collection.title | default: 'All Hampers & Gifts' }}</span>
+    </nav>
 
-  <div class="product-grid">
-    {% for product in collection.products %}
-      {% assign variant = product.selected_or_first_available_variant | default: product.variants.first %}
-      <div class="product-card-coral">
-        <div class="product-card-media">
-          <span class="product-badge-pill">Customizable</span>
-          <a href="{{ product.url }}" style="display: block; width: 100%; height: 100%;">
-            {% if product.featured_image %}
-              <img src="{{ product.featured_image | image_url: width: 600 }}" 
-                   alt="{{ product.title | escape }}" 
-                   loading="lazy" 
-                   width="600" 
-                   height="450">
+    <!-- Collection Header & Description -->
+    <div class="igp-collection-header">
+      <div class="collection-title-wrap">
+        <h1>{{ collection.title | default: 'Corporate Hampers & Celebration Gifts' }}</h1>
+        <span class="collection-count">({{ collection.products_count | default: 12 }} Gifts Available)</span>
+      </div>
+      <p class="collection-desc">
+        {{ collection.description | default: 'Explore ready-to-ship luxury hampers, branded crates, and custom gift bundles. Zero payment upfront — custom laser engraving included on 25+ units.' }}
+      </p>
+    </div>
+
+    <!-- IGP Style Filter & Sort Toolbar -->
+    <div class="igp-filter-toolbar">
+      <div class="igp-filter-chips">
+        <span class="filter-label">Quick Filters:</span>
+        <button type="button" class="filter-chip active" onclick="this.classList.toggle('active')">All Hampers</button>
+        <button type="button" class="filter-chip" onclick="this.classList.toggle('active')">⚡ Express Dispatch</button>
+        <button type="button" class="filter-chip" onclick="this.classList.toggle('active')">⭐ 4.5+ Rated</button>
+        <button type="button" class="filter-chip" onclick="this.classList.toggle('active')">🎨 Free Logo Engraving</button>
+        <a href="/#box-builder" class="filter-chip chip-highlight">📦 Custom Box Builder</a>
+      </div>
+
+      <div class="igp-sort-wrapper">
+        <label for="igp-sort-select">Sort By:</label>
+        <select id="igp-sort-select" onchange="location = this.value;">
+          <option value="?sort_by=manual">Popularity (Recommended)</option>
+          <option value="?sort_by=price-ascending">Price: Low to High</option>
+          <option value="?sort_by=price-descending">Price: High to Low</option>
+          <option value="?sort_by=created-descending">Newest Arrivals</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="igp-products-grid">
+      {% assign count = 0 %}
+      {% for product in collection.products %}
+        {% assign count = count | plus: 1 %}
+        {% assign variant = product.selected_or_first_available_variant | default: product.variants.first %}
+        
+        <div class="igp-product-card">
+          <!-- Card Media -->
+          <div class="igp-card-media">
+            {% if product.tags contains 'custom:packaging' %}
+              <span class="igp-badge-curated">Box Style</span>
+            {% elsif product.tags contains 'custom:box_item' %}
+              <span class="igp-badge-curated">Box Goodie</span>
             {% else %}
-              <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=600&q=80" 
-                   alt="{{ product.title | escape }}" 
-                   loading="lazy" 
-                   width="600" 
-                   height="450">
+              <span class="igp-badge-curated">Curated</span>
             {% endif %}
-          </a>
-        </div>
 
-        <div class="product-card-body">
-          <h3><a href="{{ product.url }}">{{ product.title }}</a></h3>
-          <div class="product-card-subtitle">MOQ: 10 units &bull; Tiered Volume Pricing Available</div>
-        </div>
-
-        <div class="product-card-footer">
-          <div class="product-card-price">{{ product.price | money }}</div>
-          <div style="display: flex; gap: 0.5rem;">
-            <form action="/cart/add" method="post">
-              <input type="hidden" name="id" value="{{ variant.id }}">
-              <input type="hidden" name="quantity" value="1">
-              <button type="submit" class="btn-pill-quote" style="border-color: #dee2e6; color: #495057;">
-                + Basket
-              </button>
-            </form>
-            <button type="button" 
-                    class="btn-pill-quote" 
-                    onclick="openQuoteModal({ title: {{ product.title | json }}, price: {{ product.price | money | json }} })">
-              Quote &rarr;
+            <button type="button" class="igp-wishlist-icon" aria-label="Save" onclick="this.classList.toggle('active')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
             </button>
+
+            <a href="{{ product.url }}" class="igp-card-img-link">
+              {% if product.featured_image %}
+                <img src="{{ product.featured_image | image_url: width: 600 }}" 
+                     alt="{{ product.title | escape }}" 
+                     loading="lazy" 
+                     width="300" 
+                     height="300">
+              {% else %}
+                <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=600&q=80" 
+                     alt="{{ product.title | escape }}" 
+                     loading="lazy" 
+                     width="300" 
+                     height="300">
+              {% endif %}
+            </a>
+
+            <!-- Rating Pill -->
+            <div class="igp-rating-badge">
+              <span class="star-icon">★</span> 4.8 <span class="review-count">({{ product.id | modulo: 80 | plus: 45 }})</span>
+            </div>
+          </div>
+
+          <!-- Card Body -->
+          <div class="igp-card-body">
+            <h3 class="igp-card-title">
+              <a href="{{ product.url }}">{{ product.title }}</a>
+            </h3>
+
+            <div class="igp-price-row">
+              <span class="igp-current-price">{{ product.price | money }}</span>
+              <span class="igp-mrp-price">{{ product.price | times: 1.25 | money }}</span>
+              <span class="igp-discount-tag">20% OFF</span>
+            </div>
+
+            <div class="igp-delivery-pill">
+              <span>⚡ Earliest Dispatch: Today</span> &bull; <span>MOQ: 10 units</span>
+            </div>
+
+            <div class="igp-card-actions">
+              <form action="/cart/add" method="post" class="igp-add-form">
+                <input type="hidden" name="id" value="{{ variant.id }}">
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" class="btn-igp-basket-sm">+ Basket</button>
+              </form>
+              <button type="button" 
+                      class="btn-igp-quote-sm" 
+                      onclick="openQuoteModal({ title: {{ product.title | json }}, price: {{ product.price | money | json }} })">
+                Request Quote
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    {% else %}
-      <p class="text-muted" style="grid-column: 1/-1; text-align: center; padding: 3rem 0;">
-        No products found in this collection.
-      </p>
-    {% endfor %}
+      {% else %}
+        <p class="text-muted" style="grid-column: 1/-1; text-align: center; padding: 3rem 0;">
+          No products found in this collection.
+        </p>
+      {% endfor %}
+    </div>
   </div>
 </div>
 
 {% schema %}
 {
   "name": "Collection Products",
-  "settings": []
+  "settings": [],
+  "presets": [
+    {
+      "name": "Collection Products"
+    }
+  ]
 }
 {% endschema %}
